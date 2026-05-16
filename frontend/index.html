@@ -76,7 +76,7 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; back
 .tool-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(245, 158, 11, 0.1); }
 .schedule-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
 .schedule-row label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
-.schedule-input { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none; }
+.schedule-input { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.2s; }
 .schedule-input:focus { border-color: var(--primary); }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 .calendar-day-header { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; padding: 8px 0; text-transform: uppercase; }
@@ -243,52 +243,64 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 </div>
 
+<!-- Dashboard Page -->
 <div class="page-section active" id="page-dashboard">
+<!-- Stats -->
 <div class="stats-grid animate-in">
-  <div class="stat-card">
-    <div class="stat-header"><span class="stat-label">Page Followers</span><div class="stat-icon" style="background:rgba(245,158,11,0.15);">👥</div></div>
-    <div class="stat-value" id="stat-followers">--</div>
-    <div class="stat-change positive" id="change-followers">Loading...</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-header"><span class="stat-label">Post Reach</span><div class="stat-icon" style="background:rgba(59,130,246,0.15);">👁️</div></div>
-    <div class="stat-value" id="stat-reach">--</div>
-    <div class="stat-change positive" id="change-reach">Loading...</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-header"><span class="stat-label">Engagement Rate</span><div class="stat-icon" style="background:rgba(16,185,129,0.15);">💬</div></div>
-    <div class="stat-value" id="stat-engagement-rate">--</div>
-    <div class="stat-change positive" id="change-engagement">Loading...</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-header"><span class="stat-label">Posts This Month</span><div class="stat-icon" style="background:rgba(139,92,246,0.15);">📝</div></div>
-    <div class="stat-value" id="stat-posts-month">--</div>
-    <div class="stat-change positive" id="change-posts">Loading...</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-header"><span class="stat-label">Website Clicks</span><div class="stat-icon" style="background:rgba(239,68,68,0.15);">🔗</div></div>
-    <div class="stat-value" id="stat-clicks">--</div>
-    <div class="stat-change positive" id="change-clicks">Loading...</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-header"><span class="stat-label">Leads/Contacts</span><div class="stat-icon" style="background:rgba(245,158,11,0.15);">🎯</div></div>
-    <div class="stat-value" id="stat-leads">--</div>
-    <div class="stat-change positive" id="change-leads">Loading...</div>
-  </div>
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">Page Followers</span><div class="stat-icon" style="background:rgba(245,158,11,0.15);">👥</div></div>
+<div class="stat-value" id="followerCount">12,847</div>
+<div class="stat-change positive">↑ +342 this week</div>
 </div>
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">Post Reach</span><div class="stat-icon" style="background:rgba(59,130,246,0.15);">👁️</div></div>
+<div class="stat-value">48,293</div>
+<div class="stat-change positive">↑ +18.5% vs last week</div>
+</div>
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">Engagement Rate</span><div class="stat-icon" style="background:rgba(16,185,129,0.15);">💬</div></div>
+<div class="stat-value">4.8%</div>
+<div class="stat-change positive">↑ +1.2% improvement</div>
+</div>
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">Posts This Month</span><div class="stat-icon" style="background:rgba(139,92,246,0.15);">📝</div></div>
+<div class="stat-value">23</div>
+<div class="stat-change positive">↑ On track for 30+</div>
+</div>
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">Website Clicks</span><div class="stat-icon" style="background:rgba(239,68,68,0.15);">🔗</div></div>
+<div class="stat-value">1,247</div>
+<div class="stat-change positive">↑ +23% to profsolar.co.za</div>
+</div>
+<div class="stat-card">
+<div class="stat-header"><span class="stat-label">Leads Generated</span><div class="stat-icon" style="background:rgba(245,158,11,0.15);">🎯</div></div>
+<div class="stat-value">89</div>
+<div class="stat-change positive">↑ +15 new this week</div>
+</div>
+</div>
+<!-- Charts Row -->
 <div class="grid-2 animate-in">
-<div class="card"><div class="card-header"><div><div class="card-title">Follower Growth</div><div class="card-subtitle">Last 30 days</div></div><div class="tabs" style="margin-bottom:0;"><button class="tab active" onclick="updateFollowerChart('30d')">30D</button><button class="tab" onclick="updateFollowerChart('90d')">90D</button></div></div><div class="chart-container"><canvas id="followerChart"></canvas></div></div>
-<div class="card"><div class="card-header"><div><div class="card-title">Engagement Overview</div><div class="card-subtitle">Likes, Comments, Shares</div></div></div><div class="chart-container"><canvas id="engagementChart"></canvas></div></div>
+<div class="card">
+<div class="card-header"><div><div class="card-title">Follower Growth</div><div class="card-subtitle">Last 30 days</div></div><div class="tabs" style="margin-bottom:0;"><button class="tab active" onclick="updateFollowerChart('30d')">30D</button><button class="tab" onclick="updateFollowerChart('90d')">90D</button></div></div>
+<div class="chart-container"><canvas id="followerChart"></canvas></div>
 </div>
+<div class="card">
+<div class="card-header"><div><div class="card-title">Engagement Overview</div><div class="card-subtitle">Likes, Comments, Shares</div></div></div>
+<div class="chart-container"><canvas id="engagementChart"></canvas></div>
+</div>
+</div>
+<!-- Recent Activity & Quick Actions -->
 <div class="grid-2 animate-in">
-<div class="card"><div class="card-header"><div class="card-title">Recent Activity</div><button class="btn btn-outline btn-sm">View All</button></div>
-<div class="activity-item"><div class="activity-icon" style="background:rgba(16,185,129,0.15);">❤️</div><div class="activity-info"><h4>Post received 127 likes</h4><span>"Why Solar Panels Are a Smart Investment in SA" - 2 hours ago</span></div></div>
-<div class="activity-item"><div class="activity-icon" style="background:rgba(59,130,246,0.15);">💬</div><div class="activity-info"><h4>23 new comments on installation post</h4><span>High engagement - respond to boost reach - 4 hours ago</span></div></div>
-<div class="activity-item"><div class="activity-icon" style="background:rgba(245,158,11,0.15);">🔄</div><div class="activity-info"><h4>Post shared 45 times</h4><span>"Load Shedding Survival Guide" going viral - 6 hours ago</span></div></div>
-<div class="activity-item"><div class="activity-icon" style="background:rgba(139,92,246,0.15);">👥</div><div class="activity-info"><h4>+89 new followers today</h4><span>Organic growth from viral post - 8 hours ago</span></div></div>
-<div class="activity-item"><div class="activity-icon" style="background:rgba(239,68,68,0.15);">🔗</div><div class="activity-info"><h4>67 clicks to profsolar.co.za</h4><span>From "Get a Free Solar Quote" CTA post - 12 hours ago</span></div></div>
+<div class="card">
+<div class="card-header"><div class="card-title">Recent Activity</div><button class="btn btn-outline btn-sm">View All</button></div>
+<div class="activity-item"><div class="activity-icon" style="background:var(--bg-input);">❤️</div><div class="activity-info"><h4>Post received 127 likes</h4><span>"Why Solar Panels Are a Smart Investment in SA" - 2 hours ago</span></div></div>
+<div class="activity-item"><div class="activity-icon" style="background:var(--bg-input);">💬</div><div class="activity-info"><h4>23 new comments on installation post</h4><span>High engagement - respond to boost reach - 4 hours ago</span></div></div>
+<div class="activity-item"><div class="activity-icon" style="background:var(--bg-input);">🔄</div><div class="activity-info"><h4>Post shared 45 times</h4><span>"Load Shedding Survival Guide" going viral - 6 hours ago</span></div></div>
+<div class="activity-item"><div class="activity-icon" style="background:var(--bg-input);">👥</div><div class="activity-info"><h4>+89 new followers today</h4><span>Organic growth from viral post - 8 hours ago</span></div></div>
+<div class="activity-item"><div class="activity-icon" style="background:var(--bg-input);">🔗</div><div class="activity-info"><h4>67 clicks to profsolar.co.za</h4><span>From "Get a Free Solar Quote" CTA post - 12 hours ago</span></div></div>
 </div>
-<div class="card"><div class="card-header"><div class="card-title">Daily Checklist</div><span class="ai-badge">✨ AI Powered</span></div>
+<div class="card">
+<div class="card-header"><div class="card-title">Daily Checklist</div><span class="ai-badge">✨ AI Powered</span></div>
 <div class="checklist-item completed"><input type="checkbox" checked onchange="toggleCheck(this)"><label>Morning post published (8:00 AM)</label></div>
 <div class="checklist-item completed"><input type="checkbox" checked onchange="toggleCheck(this)"><label>Respond to all comments from yesterday</label></div>
 <div class="checklist-item completed"><input type="checkbox" checked onchange="toggleCheck(this)"><label>Share customer testimonial</label></div>
@@ -302,6 +314,7 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 </div>
 
+<!-- Post Composer Page -->
 <div class="page-section" id="page-composer">
 <div class="grid-2">
 <div>
@@ -311,15 +324,41 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()"><div class="icon">📸</div><p>Click to upload photos/videos</p><span>Support JPG, PNG, MP4, GIF (Max 100MB)</span><input type="file" id="fileInput" style="display:none;" accept="image/*,video/*" multiple onchange="handleFileUpload(event)"></div>
 <div id="filePreview" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"></div>
 <div class="hashtag-cloud" id="hashtagCloud">
-<span class="hashtag" onclick="toggleHashtag(this)">#SolarEnergy</span><span class="hashtag" onclick="toggleHashtag(this)">#SolarPower</span><span class="hashtag" onclick="toggleHashtag(this)">#RenewableEnergy</span><span class="hashtag" onclick="toggleHashtag(this)">#LoadShedding</span><span class="hashtag" onclick="toggleHashtag(this)">#SouthAfrica</span><span class="hashtag" onclick="toggleHashtag(this)">#SolarPanels</span><span class="hashtag" onclick="toggleHashtag(this)">#GreenEnergy</span><span class="hashtag" onclick="toggleHashtag(this)">#SolarInstallation</span><span class="hashtag" onclick="toggleHashtag(this)">#Eskom</span><span class="hashtag" onclick="toggleHashtag(this)">#SaveElectricity</span><span class="hashtag" onclick="toggleHashtag(this)">#SolarSolutions</span><span class="hashtag" onclick="toggleHashtag(this)">#CleanEnergy</span><span class="hashtag" onclick="toggleHashtag(this)">#ProfSolar</span><span class="hashtag" onclick="toggleHashtag(this)">#GoSolar</span><span class="hashtag" onclick="toggleHashtag(this)">#EnergyFreedom</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#SolarEnergy</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#SolarPower</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#RenewableEnergy</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#LoadShedding</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#SouthAfrica</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#SolarPanels</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#GreenEnergy</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#SolarInstallation</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#Eskom</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#SaveElectricity</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#SolarSolutions</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#CleanEnergy</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#ProfSolar</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#GoSolar</span>
+<span class="hashtag" onclick="toggleHashtag(this)">#EnergyFreedom</span>
 </div>
 <div class="schedule-row"><label>📅 Schedule:</label><input type="date" class="schedule-input" id="scheduleDate"><input type="time" class="schedule-input" id="scheduleTime" value="08:00"><select class="schedule-input" id="postType"><option value="feed">Feed Post</option><option value="story">Story</option><option value="reel">Reel</option></select></div>
 <div class="composer-actions">
-<div class="composer-tools"><button class="tool-btn" title="Add Photo" onclick="document.getElementById('fileInput').click()">📷</button><button class="tool-btn" title="Add Video" onclick="document.getElementById('fileInput').click()">🎬</button><button class="tool-btn" title="Add Link" onclick="addLinkToPost()">🔗</button><button class="tool-btn" title="Add Poll" onclick="addPollToPost()">📊</button><button class="tool-btn" title="Add Emoji" onclick="addEmoji()">😊</button><button class="tool-btn" title="AI Suggest" onclick="aiSuggestContent()">🤖</button></div>
-<div style="display:flex;gap:8px;"><button class="btn btn-outline" onclick="saveDraft()">Save Draft</button><button class="btn btn-facebook" onclick="schedulePost()">⏰ Schedule</button><button class="btn btn-primary" onclick="publishPost()">🚀 Publish Now</button></div>
+<div class="composer-tools">
+<button class="tool-btn" title="Add Photo" onclick="document.getElementById('fileInput').click()">📷</button>
+<button class="tool-btn" title="Add Video" onclick="document.getElementById('fileInput').click()">🎬</button>
+<button class="tool-btn" title="Add Link" onclick="addLinkToPost()">🔗</button>
+<button class="tool-btn" title="Add Poll" onclick="addPollToPost()">📊</button>
+<button class="tool-btn" title="Add Emoji" onclick="addEmoji()">😊</button>
+<button class="tool-btn" title="AI Suggest" onclick="aiSuggestContent()">🤖</button>
+</div>
+<div style="display:flex;gap:8px;">
+<button class="btn btn-outline" onclick="saveDraft()">Save Draft</button>
+<button class="btn btn-facebook" onclick="schedulePost()">⏰ Schedule</button>
+<button class="btn btn-primary" onclick="publishPost()">🚀 Publish Now</button>
 </div>
 </div>
-<div class="card" style="margin-top:20px;"><div class="card-header"><div class="card-title">✨ AI Content Suggestions</div><button class="btn btn-outline btn-sm" onclick="refreshSuggestions()">🔄 Refresh</button></div>
+</div>
+<div class="card" style="margin-top:20px;">
+<div class="card-header"><div class="card-title">✨ AI Content Suggestions</div><button class="btn btn-outline btn-sm" onclick="refreshSuggestions()">🔄 Refresh</button></div>
 <div id="aiSuggestions">
 <div class="suggestion-card" onclick="useSuggestion(this)"><h4>💡 Educational Post</h4><p>"Did you know? A 5kW solar system can save the average South African household up to R2,500 per month on electricity bills! With Eskom tariffs rising 15% annually, going solar isn't just eco-friendly—it's financially brilliant. ☀️💰\n👉 Get your FREE quote: www.profsolar.co.za\n#SolarEnergy #LoadShedding #ProfSolar"</p><span class="suggestion-type type-educational">Educational</span></div>
 <div class="suggestion-card" onclick="useSuggestion(this)"><h4>📸 Engagement Post</h4><p>"Show us your solar setup! 📸 Drop a photo of your Prof Solar installation in the comments below. The most creative setup wins a FREE system check-up! 🏆\nTag a friend who needs to go solar! 👇\n#ProfSolar #SolarCommunity #GoSolar"</p><span class="suggestion-type type-engagement">Engagement</span></div>
@@ -328,35 +367,70 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 </div>
 <div>
-<div class="card" style="position:sticky;top:24px;"><div class="card-header"><div class="card-title">📱 Post Preview</div><span class="ai-badge">Live Preview</span></div>
-<div class="post-preview" id="postPreview"><div class="preview-header"><div class="preview-avatar">PS</div><div><div class="preview-name">Prof Solar ☀️</div><div class="preview-time">Just now · 🌍</div></div></div><div class="preview-content" id="previewContent">Your post content will appear here as you type...</div><div class="preview-image" id="previewImage">☀️</div><div class="preview-stats"><div class="preview-stat">👍 Like</div><div class="preview-stat">💬 Comment</div><div class="preview-stat">↗️ Share</div></div></div>
-<div style="margin-top:16px;"><div class="card-title" style="font-size:13px;margin-bottom:10px;">📊 Predicted Performance</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--primary);">~285</div><div style="font-size:11px;color:var(--text-muted);">Est. Reach</div></div><div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--accent);">~34</div><div style="font-size:11px;color:var(--text-muted);">Est. Engagement</div></div><div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--info);">~12</div><div style="font-size:11px;color:var(--text-muted);">Est. Clicks</div></div><div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--purple);">4.2%</div><div style="font-size:11px;color:var(--text-muted);">Eng. Rate</div></div></div></div>
+<div class="card" style="position:sticky;top:24px;">
+<div class="card-header"><div class="card-title">📱 Post Preview</div><span class="ai-badge">Live Preview</span></div>
+<div class="post-preview" id="postPreview">
+<div class="preview-header"><div class="preview-avatar">PS</div><div><div class="preview-name">Prof Solar ☀️</div><div class="preview-time">Just now · 🌍</div></div></div>
+<div class="preview-content" id="previewContent">Your post content will appear here as you type...</div>
+<div class="preview-image" id="previewImage">☀️</div>
+<div class="preview-stats"><div class="preview-stat">👍 Like</div><div class="preview-stat">💬 Comment</div><div class="preview-stat">↗️ Share</div></div>
+</div>
+<div style="margin-top:16px;">
+<div class="card-title" style="font-size:13px;margin-bottom:10px;">📊 Predicted Performance</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+<div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--primary);">~285</div><div style="font-size:11px;color:var(--text-muted);">Est. Reach</div></div>
+<div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--accent);">~34</div><div style="font-size:11px;color:var(--text-muted);">Est. Engagement</div></div>
+<div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--info);">~12</div><div style="font-size:11px;color:var(--text-muted);">Est. Clicks</div></div>
+<div style="background:var(--bg-input);border-radius:8px;padding:12px;text-align:center;"><div style="font-size:18px;font-weight:700;color:var(--purple);">4.2%</div><div style="font-size:11px;color:var(--text-muted);">Eng. Rate</div></div>
+</div>
 </div>
 </div>
 </div>
 </div>
 
+<!-- Calendar Page -->
 <div class="page-section" id="page-calendar">
-<div class="card"><div class="card-header"><div><div class="card-title" id="calendarTitle">January 2025</div><div class="card-subtitle">Content Calendar - Click a day to schedule a post</div></div><div style="display:flex;gap:8px;"><button class="btn btn-outline btn-sm" onclick="changeMonth(-1)">◀ Prev</button><button class="btn btn-outline btn-sm" onclick="changeMonth(0)">Today</button><button class="btn btn-outline btn-sm" onclick="changeMonth(1)">Next ▶</button></div></div><div class="calendar-grid" id="calendarGrid"></div><div style="display:flex;gap:16px;margin-top:16px;font-size:12px;color:var(--text-muted);"><span><span class="post-dot scheduled" style="display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;"></span> Scheduled</span><span><span class="post-dot published" style="display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;"></span> Published</span><span><span class="post-dot draft" style="display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;"></span> Draft</span></div></div>
+<div class="card">
+<div class="card-header"><div><div class="card-title" id="calendarTitle">January 2025</div><div class="card-subtitle">Content Calendar - Click a day to schedule a post</div></div><div style="display:flex;gap:8px;"><button class="btn btn-outline btn-sm" onclick="changeMonth(-1)">◀ Prev</button><button class="btn btn-outline btn-sm" onclick="changeMonth(0)">Today</button><button class="btn btn-outline btn-sm" onclick="changeMonth(1)">Next ▶</button></div></div>
+<div class="calendar-grid" id="calendarGrid"></div>
+<div style="display:flex;gap:16px;margin-top:16px;font-size:12px;color:var(--text-muted);"><span><span class="post-dot scheduled" style="display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;"></span> Scheduled</span><span><span class="post-dot published" style="display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;"></span> Published</span><span><span class="post-dot draft" style="display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;"></span> Draft</span></div>
+</div>
 <div class="grid-2">
-<div class="card"><div class="card-header"><div class="card-title">📋 This Week's Schedule</div></div>
+<div class="card">
+<div class="card-header"><div class="card-title">📋 This Week's Schedule</div></div>
 <div class="scheduled-post"><div class="post-status published"></div><div class="post-info"><h4>Monday: Solar Savings Infographic</h4><p>Visual breakdown of monthly savings with a 5kW system</p><div class="post-meta"><span>📅 Mon 8:00 AM</span><span>👁️ 1,247 reach</span><span>❤️ 89 likes</span></div></div></div>
 <div class="scheduled-post"><div class="post-status published"></div><div class="post-info"><h4>Tuesday: Customer Testimonial Video</h4><p>Video testimonial from happy customer in Johannesburg</p><div class="post-meta"><span>📅 Tue 2:00 PM</span><span>👁️ 2,103 reach</span><span>❤️ 156 likes</span></div></div></div>
 <div class="scheduled-post"><div class="post-status scheduled"></div><div class="post-info"><h4>Wednesday: Load Shedding Tips</h4><p>5 ways solar helps during load shedding stages 4-6</p><div class="post-meta"><span>📅 Wed 10:00 AM</span><span>⏰ Scheduled</span></div></div></div>
 <div class="scheduled-post"><div class="post-status scheduled"></div><div class="post-info"><h4>Thursday: Behind the Scenes</h4><p>Installation team at work - time-lapse video</p><div class="post-meta"><span>📅 Thu 3:00 PM</span><span>⏰ Scheduled</span></div></div></div>
 <div class="scheduled-post"><div class="post-status draft"></div><div class="post-info"><h4>Friday: Weekend Special Offer</h4><p>Limited-time discount on 8kW systems - draft pending review</p><div class="post-meta"><span>📅 Fri 9:00 AM</span><span>📝 Draft</span></div></div></div>
 </div>
-<div class="card"><div class="card-header"><div class="card-title">📊 Content Mix</div></div><div class="chart-container" style="height:250px;"><canvas id="contentMixChart"></canvas></div><div style="margin-top:12px;"><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span style="font-size:12px;color:var(--text-secondary);">📚 Educational</span><span style="font-size:12px;font-weight:600;">35%</span></div><div class="progress-bar"><div class="progress-fill" style="width:35%;background:var(--info);"></div></div><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;margin-top:4px;"><span style="font-size:12px;color:var(--text-secondary);">🎯 Promotional</span><span style="font-size:12px;font-weight:600;">20%</span></div><div class="progress-bar"><div class="progress-fill" style="width:20%;background:var(--primary);"></div></div><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;margin-top:4px;"><span style="font-size:12px;color:var(--text-secondary);">💬 Engagement</span><span style="font-size:12px;font-weight:600;">25%</span></div><div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--purple);"></div></div><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;margin-top:4px;"><span style="font-size:12px;color:var(--text-secondary);">⭐ Testimonials</span><span style="font-size:12px;font-weight:600;">20%</span></div><div class="progress-bar"><div class="progress-fill" style="width:20%;background:var(--accent);"></div></div></div></div>
+<div class="card">
+<div class="card-header"><div class="card-title">📊 Content Mix</div></div>
+<div class="chart-container" style="height:250px;"><canvas id="contentMixChart"></canvas></div>
+<div style="margin-top:12px;">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span style="font-size:12px;color:var(--text-muted);">📚 Educational</span><span style="font-size:12px;font-weight:600;">35%</span></div>
+<div class="progress-bar"><div class="progress-fill" style="width:35%;background:var(--info);"></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;margin-top:4px;"><span style="font-size:12px;color:var(--text-muted);">🎯 Promotional</span><span style="font-size:12px;font-weight:600;">20%</span></div>
+<div class="progress-bar"><div class="progress-fill" style="width:20%;background:var(--primary);"></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;margin-top:4px;"><span style="font-size:12px;color:var(--text-muted);">💬 Engagement</span><span style="font-size:12px;font-weight:600;">25%</span></div>
+<div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--purple);"></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;margin-top:4px;"><span style="font-size:12px;color:var(--text-muted);">⭐ Testimonials</span><span style="font-size:12px;font-weight:600;">20%</span></div>
+<div class="progress-bar"><div class="progress-fill" style="width:20%;background:var(--accent);"></div></div>
+</div>
+</div>
 </div>
 </div>
 
+<!-- Scheduled Posts Page -->
 <div class="page-section" id="page-scheduled">
-<div class="card"><div class="card-header"><div><div class="card-title">⏰ Scheduled & Published Posts</div><div class="card-subtitle">Manage all your upcoming Facebook posts</div></div><button class="btn btn-primary" onclick="switchPage('composer')">✏️ Create New Post</button></div>
+<div class="card">
+<div class="card-header"><div><div class="card-title">⏰ Scheduled & Published Posts</div><div class="card-subtitle">Manage all your upcoming Facebook posts</div></div><button class="btn btn-primary" onclick="switchPage('composer')">✏️ Create New Post</button></div>
 <div class="tabs"><button class="tab active" onclick="filterPosts('all', this)">All</button><button class="tab" onclick="filterPosts('scheduled', this)">Scheduled</button><button class="tab" onclick="filterPosts('published', this)">Published</button><button class="tab" onclick="filterPosts('draft', this)">Drafts</button></div>
 <div id="postsList"></div>
 </div>
 </div>
 
+<!-- Analytics Page -->
 <div class="page-section" id="page-analytics">
 <div class="stats-grid">
 <div class="stat-card"><div class="stat-header"><span class="stat-label">Total Page Likes</span><div class="stat-icon" style="background:rgba(24,119,242,0.15);">👍</div></div><div class="stat-value">12,847</div><div class="stat-change positive">↑ +847 this month</div></div>
@@ -376,6 +450,7 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 <div class="card"><div class="card-header"><div class="card-title">👥 Audience Demographics</div></div><div class="grid-3"><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Age Distribution</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">25-34</span><div class="progress-bar"><div class="progress-fill" style="width:38%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">38%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">35-44</span><div class="progress-bar"><div class="progress-fill" style="width:32%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">32%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">45-54</span><div class="progress-bar"><div class="progress-fill" style="width:18%;background:var(--accent);"></div></div><span style="font-size:11px;color:var(--text-muted);">18%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">18-24</span><div class="progress-bar"><div class="progress-fill" style="width:8%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">8%</span></div><div><span style="font-size:12px;">55+</span><div class="progress-bar"><div class="progress-fill" style="width:4%;background:var(--danger);"></div></div><span style="font-size:11px;color:var(--text-muted);">4%</span></div></div><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Top Locations</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">Gauteng</span><div class="progress-bar"><div class="progress-fill" style="width:42%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">42%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Western Cape</span><div class="progress-bar"><div class="progress-fill" style="width:24%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">24%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">KwaZulu-Natal</span><div class="progress-bar"><div class="progress-fill" style="width:18%;background:var(--accent);"></div></div><span style="font-size:11px;color:var(--text-muted);">18%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Eastern Cape</span><div class="progress-bar"><div class="progress-fill" style="width:9%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">9%</span></div><div><span style="font-size:12px;">Other</span><div class="progress-bar"><div class="progress-fill" style="width:7%;background:var(--danger);"></div></div><span style="font-size:11px;color:var(--text-muted);">7%</span></div></div><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Gender</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">Male</span><div class="progress-bar"><div class="progress-fill" style="width:62%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">62%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Female</span><div class="progress-bar"><div class="progress-fill" style="width:36%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">36%</span></div><div><span style="font-size:12px;">Other</span><div class="progress-bar"><div class="progress-fill" style="width:2%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">2%</span></div><h4 style="font-size:13px;margin:16px 0 12px;color:var(--text-muted);">Peak Active Hours</h4><div style="font-size:12px;color:var(--text-secondary);">🌅 Morning: 7-9 AM (High)</div><div style="font-size:12px;color:var(--text-secondary);">🌞 Midday: 12-2 PM (Medium)</div><div style="font-size:12px;color:var(--text-secondary);">🌆 Evening: 6-9 PM (Highest)</div></div></div></div>
 </div>
 
+<!-- Viral Trends Page -->
 <div class="page-section" id="page-trends">
 <div class="grid-2">
 <div class="card"><div class="card-header"><div><div class="card-title">🔥 Trending Solar Topics</div><div class="card-subtitle">Current viral topics in the solar/renewable energy space</div></div><button class="btn btn-outline btn-sm" onclick="refreshTrends()">🔄 Refresh</button></div>
@@ -397,6 +472,7 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 <div class="card"><div class="card-header"><div class="card-title">🎯 Recommended Hashtags for Maximum Reach</div></div><div class="hashtag-cloud"><span class="hashtag selected">#SolarEnergy</span><span class="hashtag selected">#LoadShedding</span><span class="hashtag selected">#SouthAfrica</span><span class="hashtag selected">#RenewableEnergy</span><span class="hashtag selected">#SolarPower</span><span class="hashtag">#Eskom</span><span class="hashtag">#GoSolar</span><span class="hashtag">#SolarPanels</span><span class="hashtag">#GreenEnergy</span><span class="hashtag">#CleanEnergy</span><span class="hashtag">#SolarInstallation</span><span class="hashtag">#EnergyCrisis</span><span class="hashtag">#SolarSolutions</span><span class="hashtag">#SaveMoney</span><span class="hashtag">#SustainableLiving</span><span class="hashtag">#SolarBattery</span><span class="hashtag">#OffGrid</span><span class="hashtag">#EnergyIndependence</span><span class="hashtag">#SolarROI</span><span class="hashtag">#ProfSolar</span><span class="hashtag">#SolarSA</span><span class="hashtag">#PowerCrisis</span><span class="hashtag">#SolarInverter</span><span class="hashtag">#NetZero</span></div></div>
 </div>
 
+<!-- Optimal Times Page -->
 <div class="page-section" id="page-optimal">
 <div class="card"><div class="card-header"><div><div class="card-title">🎯 Best Times to Post on Facebook</div><div class="card-subtitle">Based on your audience's activity patterns (Prof Solar followers)</div></div><span class="ai-badge">✨ AI Analyzed</span></div>
 <div style="margin-bottom:20px;"><div class="time-labels"><div class="time-label">Mon</div><div class="time-label">Tue</div><div class="time-label">Wed</div><div class="time-label">Thu</div><div class="time-label">Fri</div><div class="time-label">Sat</div><div class="time-label">Sun</div></div><div class="time-grid" id="timeHeatmap"></div><div style="display:flex;gap:12px;margin-top:12px;font-size:11px;color:var(--text-muted);align-items:center;"><span>Low</span><div style="width:16px;height:16px;border-radius:3px;background:var(--bg-input);"></div><div style="width:16px;height:16px;border-radius:3px;background:rgba(245,158,11,0.1);"></div><div style="width:16px;height:16px;border-radius:3px;background:rgba(245,158,11,0.25);"></div><div style="width:16px;height:16px;border-radius:3px;background:rgba(245,158,11,0.45);"></div><div style="width:16px;height:16px;border-radius:3px;background:rgba(245,158,11,0.7);"></div><span>High</span></div></div>
@@ -408,24 +484,29 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 </div>
 
+<!-- Strategy Page -->
 <div class="page-section" id="page-strategy">
 <div class="card"><div class="card-header"><div><div class="card-title">🚀 Facebook Marketing Strategy for Prof Solar</div><div class="card-subtitle">Comprehensive growth plan to maximize page reach and generate leads</div></div></div><div class="grid-3"><div class="strategy-card"><h4>🎯 Content Pillars</h4><p>Build content around 4 key pillars: Education (solar knowledge), Social Proof (testimonials), Engagement (questions/polls), and Promotion (offers). Maintain 35/20/25/20 ratio.</p><span class="strategy-tag tag-high">Critical</span></div><div class="strategy-card"><h4>📹 Video-First Strategy</h4><p>Facebook prioritizes video content. Post installation time-lapses, customer testimonials, and educational explainers. Reels get 3x more reach than static posts.</p><span class="strategy-tag tag-high">Critical</span></div><div class="strategy-card"><h4>💬 Community Engagement</h4><p>Respond to EVERY comment within 2 hours. Ask questions in posts. Create polls. Engage with other solar/renewable energy pages to increase visibility.</p><span class="strategy-tag tag-high">Critical</span></div><div class="strategy-card"><h4>🔥 Trend Jacking</h4><p>Monitor load shedding schedules, energy news, and trending topics. Create timely posts that ride viral waves. Eskom announcements = golden posting opportunities.</p><span class="strategy-tag tag-medium">High Impact</span></div><div class="strategy-card"><h4>👥 Facebook Groups</h4><p>Join and actively participate in SA solar, load shedding, and home improvement groups. Share valuable content (not just promotions) to build authority and drive traffic.</p><span class="strategy-tag tag-medium">High Impact</span></div><div class="strategy-card"><h4>📊 Data-Driven Optimization</h4><p>Review analytics weekly. Double down on what works. Kill underperforming content types. A/B test post times, formats, and CTAs continuously.</p><span class="strategy-tag tag-medium">High Impact</span></div><div class="strategy-card"><h4>🤝 Influencer Partnerships</h4><p>Partner with SA home improvement influencers, sustainability advocates, and local celebrities for sponsored posts and takeovers.</p><span class="strategy-tag tag-low">Growth</span></div><div class="strategy-card"><h4>📱 Cross-Platform Synergy</h4><p>Share Facebook content to Instagram, WhatsApp Status, and LinkedIn. Create a content ecosystem where each platform feeds the others.</p><span class="strategy-tag tag-low">Growth</span></div><div class="strategy-card"><h4>🎁 Contests & Giveaways</h4><p>Monthly contests: "Win a Free Solar Assessment" or "Share & Win Solar Lights." Drives massive engagement and page follows. Require page like to enter.</p><span class="strategy-tag tag-low">Growth</span></div></div></div>
 <div class="grid-2"><div class="card"><div class="card-header"><div class="card-title">📈 90-Day Growth Roadmap</div></div><div style="position:relative;padding-left:24px;"><div style="position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border);"></div><div style="position:relative;margin-bottom:20px;"><div style="position:absolute;left:-20px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg-card);"></div><h4 style="font-size:14px;margin-bottom:4px;">Month 1: Foundation</h4><p style="font-size:12px;color:var(--text-muted);line-height:1.6;">• Establish consistent 2x daily posting<br>• Build content library (30+ posts)<br>• Optimize page info & CTA buttons<br>• Target: 15K followers (+2K)</p></div><div style="position:relative;margin-bottom:20px;"><div style="position:absolute;left:-20px;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid var(--bg-card);"></div><h4 style="font-size:14px;margin-bottom:4px;">Month 2: Acceleration</h4><p style="font-size:12px;color:var(--text-muted);line-height:1.6;">• Launch video content series<br>• Run first contest/giveaway<br>• Start Facebook Group engagement<br>• Target: 20K followers (+5K)</p></div><div style="position:relative;margin-bottom:20px;"><div style="position:absolute;left:-20px;width:12px;height:12px;border-radius:50%;background:var(--info);border:2px solid var(--bg-card);"></div><h4 style="font-size:14px;margin-bottom:4px;">Month 3: Domination</h4><p style="font-size:12px;color:var(--text-muted);line-height:1.6;">• Influencer collaboration campaign<br>• Launch targeted Facebook Ads<br>• User-generated content campaign<br>• Target: 30K followers (+10K)</p></div></div></div><div class="card"><div class="card-header"><div class="card-title">✅ Daily Action Items</div></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Publish morning post at optimal time (7-9 AM)</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Respond to ALL comments from last 24 hours</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Engage with 5+ posts from solar/renewable pages</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Share relevant solar/energy news article</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Publish afternoon/evening post (6-9 PM)</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Post to 2+ relevant Facebook Groups</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Check & respond to page messages within 1 hour</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Review daily analytics & note insights</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Schedule tomorrow's posts</label></div><div class="checklist-item"><input type="checkbox" onchange="toggleCheck(this)"><label>Monitor trending topics for content opportunities</label></div></div></div>
 </div>
 
+<!-- Auto-Post Page -->
 <div class="page-section" id="page-autopost">
 <div class="card"><div class="card-header"><div><div class="card-title">🤖 Automated Posting Configuration</div><div class="card-subtitle">Set up automatic daily posts for Prof Solar Facebook page</div></div><div class="toggle active" id="autoPostToggle" onclick="toggleAutoPost()"></div></div><div class="auto-config"><div class="config-item"><h4>📅 Posts Per Day</h4><p>Recommended: 2 posts per day for maximum engagement</p><select class="form-input" id="postsPerDay"><option value="1">1 Post Per Day</option><option value="2" selected>2 Posts Per Day</option><option value="3">3 Posts Per Day</option></select></div><div class="config-item"><h4>🕐 Morning Post Time</h4><p>Optimal: 7:00 - 9:00 AM for SA audience</p><input type="time" class="form-input" id="morningTime" value="08:00"></div><div class="config-item"><h4>🕐 Evening Post Time</h4><p>Optimal: 6:00 - 9:00 PM for SA audience</p><input type="time" class="form-input" id="eveningTime" value="19:00"></div><div class="config-item"><h4>📝 Content Rotation</h4><p>Auto-rotate between content types for variety</p><select class="form-input" id="contentRotation"><option value="smart" selected>Smart Rotation (AI)</option><option value="sequential">Sequential</option><option value="random">Random</option></select></div></div><div style="margin-top:20px;"><h4 style="font-size:14px;margin-bottom:12px;">📋 Auto-Post Content Categories</h4><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;"><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-input);border-radius:10px;"><div><div style="font-size:13px;font-weight:600;">☀️ Solar Education</div><div style="font-size:11px;color:var(--text-muted);">Tips, facts, how-tos</div></div><div class="toggle active" onclick="this.classList.toggle('active')"></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-input);border-radius:10px;"><div><div style="font-size:13px;font-weight:600;">⭐ Customer Stories</div><div style="font-size:11px;color:var(--text-muted);">Testimonials, reviews</div></div><div class="toggle active" onclick="this.classList.toggle('active')"></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-input);border-radius:10px;"><div><div style="font-size:13px;font-weight:600;">📢 Promotions</div><div style="font-size:11px;color:var(--text-muted);">Offers, discounts, CTAs</div></div><div class="toggle active" onclick="this.classList.toggle('active')"></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-input);border-radius:10px;"><div><div style="font-size:13px;font-weight:600;">🔥 Trending Topics</div><div style="font-size:11px;color:var(--text-muted);">News, viral content</div></div><div class="toggle active" onclick="this.classList.toggle('active')"></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-input);border-radius:10px;"><div><div style="font-size:13px;font-weight:600;">💬 Engagement Posts</div><div style="font-size:11px;color:var(--text-muted);">Questions, polls, contests</div></div><div class="toggle active" onclick="this.classList.toggle('active')"></div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-input);border-radius:10px;"><div><div style="font-size:13px;font-weight:600;">📸 Behind the Scenes</div><div style="font-size:11px;color:var(--text-muted);">Installations, team photos</div></div><div class="toggle" onclick="this.classList.toggle('active')"></div></div></div></div><div style="margin-top:20px;display:flex;gap:10px;"><button class="btn btn-primary btn-lg" onclick="saveAutoPostConfig()">💾 Save Auto-Post Configuration</button><button class="btn btn-outline" onclick="generateWeekPosts()">📅 Generate Week's Posts</button></div></div>
 <div class="card"><div class="card-header"><div class="card-title">📊 Auto-Post Performance</div><div class="card-subtitle">How automated posts are performing</div></div><div class="chart-container"><canvas id="autoPostChart"></canvas></div></div>
 </div>
 
+<!-- Content Ideas Page -->
 <div class="page-section" id="page-content">
 <div class="card"><div class="card-header"><div><div class="card-title">💡 AI-Generated Content Ideas for Prof Solar</div><div class="card-subtitle">Fresh post ideas tailored for your solar energy audience in South Africa</div></div><button class="btn btn-primary" onclick="generateMoreIdeas()">🔄 Generate More Ideas</button></div><div class="tabs"><button class="tab active" onclick="filterIdeas('all', this)">All Ideas</button><button class="tab" onclick="filterIdeas('educational', this)">Educational</button><button class="tab" onclick="filterIdeas('promotional', this)">Promotional</button><button class="tab" onclick="filterIdeas('engagement', this)">Engagement</button><button class="tab" onclick="filterIdeas('testimonial', this)">Testimonial</button></div><div id="ideasList"><div class="suggestion-card" data-type="educational" onclick="useIdea(this)"><h4>📚 "How Solar Panels Work in Simple Terms"</h4><p>Create an easy-to-understand infographic explaining the solar energy process from panel to plug. Perfect for audiences new to solar. Include simple diagrams and SA-specific data.</p><span class="suggestion-type type-educational">Educational</span></div><div class="suggestion-card" data-type="promotional" onclick="useIdea(this)"><h4>🎯 "Free Solar Assessment - Limited Spots"</h4><p>Create urgency with a limited-time free solar assessment offer. Include a clear CTA linking to profsolar.co.za. Use countdown language and social proof ("500+ assessments completed").</p><span class="suggestion-type type-promotional">Promotional</span></div><div class="suggestion-card" data-type="engagement" onclick="useIdea(this)"><h4>💬 "What's Your Load Shedding Horror Story?"</h4><p>Ask followers to share their worst load shedding experiences. This drives massive comments and engagement. Follow up with how solar could have prevented each situation.</p><span class="suggestion-type type-engagement">Engagement</span></div><div class="suggestion-card" data-type="testimonial" onclick="useIdea(this)"><h4>⭐ "6 Months Solar - Here's What Happened"</h4><p>Share a customer's 6-month journey with before/after electricity bills, lifestyle changes, and ROI calculations. Real data builds trust and drives conversions.</p><span class="suggestion-type type-testimonial">Testimonial</span></div><div class="suggestion-card" data-type="educational" onclick="useIdea(this)"><h4>📊 "Solar System Size Calculator"</h4><p>Create a post series helping people determine what size system they need based on their home size, appliances, and usage. Link to the calculator on profsolar.co.za.</p><span class="suggestion-type type-educational">Educational</span></div><div class="suggestion-card" data-type="engagement" onclick="useIdea(this)"><h4>🗳️ "Poll: What's Your Biggest Solar Concern?"</h4><p>Use Facebook's poll feature to ask about solar concerns (cost, maintenance, aesthetics, reliability). Use results to create targeted content addressing each concern.</p><span class="suggestion-type type-engagement">Engagement</span></div><div class="suggestion-card" data-type="promotional" onclick="useIdea(this)"><h4>🎁 "Refer a Friend, Both Get R1000 Off"</h4><p>Launch a referral program post. Encourage existing customers to refer friends and family. Both parties get a discount. Drives word-of-mouth and new leads.</p><span class="suggestion-type type-promotional">Promotional</span></div><div class="suggestion-card" data-type="educational" onclick="useIdea(this)"><h4>🔋 "Battery Storage: Is It Worth It?"</h4><p>Comprehensive post comparing battery options (lithium vs lead-acid), costs, lifespan, and ROI. Position Prof Solar as the battery storage expert.</p><span class="suggestion-type type-educational">Educational</span></div></div></div>
 </div>
 
+<!-- Settings Page -->
 <div class="page-section" id="page-settings">
 <div class="grid-2"><div class="card"><div class="card-header"><div class="card-title">🔗 Facebook Page Connection</div></div><div class="connection-status connected" style="margin-bottom:16px;"><span class="status-dot connected"></span>Connected: Prof Solar (profsolar.co.za)</div><div class="form-group"><label>Page Name</label><input type="text" class="form-input" value="Prof Solar" readonly></div><div class="form-group"><label>Page ID</label><input type="text" class="form-input" value="61565494267923" readonly></div><div class="form-group"><label>Website URL</label><input type="text" class="form-input" value="https://www.profsolar.co.za"></div><div class="form-group"><label>Default CTA Link</label><input type="text" class="form-input" value="https://www.profsolar.co.za/get-quote"></div><button class="btn btn-facebook" onclick="showToast('Facebook connection refreshed!', 'success')">🔄 Refresh Connection</button></div><div class="card"><div class="card-header"><div class="card-title">⚙️ Posting Preferences</div></div><div class="form-group"><label>Default Post Timezone</label><select class="form-input"><option selected>South Africa (SAST, UTC+2)</option></select></div><div class="form-group"><label>Default Hashtags</label><textarea class="form-input" rows="3">#SolarEnergy #LoadShedding #ProfSolar #SouthAfrica #RenewableEnergy #GoSolar</textarea></div><div class="form-group"><label>Post Signature</label><textarea class="form-input" rows="2">☀️ Get your FREE solar quote: www.profsolar.co.za</textarea></div><div class="form-group"><label>Auto-respond to Comments</label><div style="display:flex;align-items:center;gap:12px;"><div class="toggle active" onclick="this.classList.toggle('active')"></div><span style="font-size:12px;color:var(--text-muted);">Auto-reply to common questions</span></div></div><div class="form-group"><label>Notification Email</label><input type="email" class="form-input" value="info@profsolar.co.za"></div><button class="btn btn-primary" onclick="showToast('Settings saved successfully!', 'success')">💾 Save Settings</button></div></div>
 <div class="card"><div class="card-header"><div class="card-title">📊 API Integration Status</div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"><div style="background:var(--bg-input);border-radius:10px;padding:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">Facebook Graph API</div><div style="display:flex;align-items:center;gap:6px;"><span class="status-dot connected" style="width:6px;height:6px;"></span><span style="font-size:12px;color:var(--accent);">Connected</span></div></div><div style="background:var(--bg-input);border-radius:10px;padding:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">Page Publishing</div><div style="display:flex;align-items:center;gap:6px;"><span class="status-dot connected" style="width:6px;height:6px;"></span><span style="font-size:12px;color:var(--accent);">Active</span></div></div><div style="background:var(--bg-input);border-radius:10px;padding:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">Insights API</div><div style="display:flex;align-items:center;gap:6px;"><span class="status-dot connected" style="width:6px;height:6px;"></span><span style="font-size:12px;color:var(--accent);">Active</span></div></div><div style="background:var(--bg-input);border-radius:10px;padding:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">Media Upload</div><div style="display:flex;align-items:center;gap:6px;"><span class="status-dot connected" style="width:6px;height:6px;"></span><span style="font-size:12px;color:var(--accent);">Ready</span></div></div><div style="background:var(--bg-input);border-radius:10px;padding:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">Scheduled Posts</div><div style="display:flex;align-items:center;gap:6px;"><span class="status-dot connected" style="width:6px;height:6px;"></span><span style="font-size:12px;color:var(--accent);">Active</span></div></div><div style="background:var(--bg-input);border-radius:10px;padding:16px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">Auto-Posting</div><div style="display:flex;align-items:center;gap:6px;"><span class="status-dot connected" style="width:6px;height:6px;"></span><span style="font-size:12px;color:var(--accent);">Enabled</span></div></div></div></div>
 </div>
+
 </main>
 </div>
 
@@ -442,233 +523,623 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 
 <script>
-// 🔑 LIVE BACKEND CONFIGURATION
-const API_URL = 'https://profsolar-backend.onrender.com';
+// ==================== GLOBAL STATE ====================
+let currentPage = 'dashboard';
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let charts = {};
 
-function init() {
-  console.log("Prof Solar App Initialized ✅");
-  
-  // Initialize UI first so pages load immediately
-  renderCalendar();
-  renderHeatmap();
-  initCharts();
-  
-  const today = document.getElementById('scheduleDate');
-  if(today) today.value = new Date().toISOString().split('T')[0];
-
-  // Fetch real data with safety timeout
-  setTimeout(() => fetchData(), 300);
-}
-
-async function fetchData() {
-  try {
-    // Load Posts List
-    const res = await fetch(API_URL + '/api/posts');
-    const data = await res.json();
-    if(data.success && data.posts) {
-      renderScheduledPosts(data.posts);
-      const count = data.posts.filter(p => p.status === 'scheduled').length;
-      const badge = document.getElementById('scheduledCount');
-      if(badge) badge.innerText = count;
+// ==================== NAVIGATION ====================
+function switchPage(page) {
+    currentPage = page;
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const pageEl = document.getElementById('page-' + page);
+    if (pageEl) pageEl.classList.add('active');
+    const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
+    if (navEl) navEl.classList.add('active');
+    const titles = { 
+        dashboard: ['Dashboard', 'Prof Solar Facebook Marketing Overview'],
+        composer: ['Post Composer', 'Create & schedule Facebook posts'],
+        calendar: ['Content Calendar', 'Plan your monthly content strategy'],
+        scheduled: ['Scheduled Posts', 'Manage upcoming Facebook posts'],
+        analytics: ['Analytics', 'Track your Facebook page performance'],
+        trends: ['Viral Trends', 'Trending topics & content opportunities'],
+        optimal: ['Optimal Posting Times', 'Best times to post for maximum reach'],
+        strategy: ['Marketing Strategy', 'Growth plan & daily action items'],
+        autopost: ['Auto-Post Configuration', 'Set up automated daily posting'],
+        content: ['Content Ideas', 'AI-generated post ideas for Prof Solar'],
+        settings: ['Settings', 'Facebook connection & preferences']
+    };
+    if (titles[page]) {
+        document.getElementById('pageTitle').textContent = titles[page][0];
+        document.getElementById('pageSubtitle').textContent = titles[page][1];
     }
-
-    // Load Analytics
-    const analyticsRes = await fetch(API_URL + '/api/analytics');
-    const analyticsData = await analyticsRes.json();
-    updateDashboard(analyticsData.stats);
-    
-  } catch(e) {
-    console.warn("Backend connection pending (Render may be waking up)...", e.message);
-    // Retry once after 10 seconds if Render is still spinning up
-    setTimeout(fetchData, 10000);
-  }
+    if (page === 'calendar') renderCalendar();
+    if (page === 'optimal') renderHeatmap();
+    if (page === 'analytics') initAnalyticsCharts();
+    if (page === 'autopost') initAutoPostChart();
+    if (page === 'scheduled') loadPosts();
+    document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
 }
 
-function updateDashboard(stats) {
-  if(!stats) return;
-  const map = {
-    'followerCount': stats.followers?.toLocaleString() || '---',
-    'stat-reach': stats.reach?.toLocaleString() || '---',
-    'stat-engagement-rate': (stats.engagementRate || 0) + '%',
-    'stat-posts-month': stats.postsThisMonth ?? '---',
-    'stat-clicks': stats.websiteClicks?.toLocaleString() || '---',
-    'stat-leads': stats.leadActions ?? '---'
-  };
-  for(const [id, val] of Object.entries(map)) {
-    const el = document.getElementById(id);
-    if(el) el.innerText = val;
-  }
+// ==================== POST COMPOSER ====================
+const postContentEl = document.getElementById('postContent');
+if (postContentEl) {
+    postContentEl.addEventListener('input', function() {
+        document.getElementById('previewContent').textContent = this.value || 'Your post content will appear here as you type...';
+    });
 }
-
-// --- NAVIGATION ---
-function switchPage(pageId) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  
-  const target = document.getElementById('page-' + pageId);
-  const nav = document.querySelector(`.nav-item[data-page="${pageId}"]`);
-  
-  if(target) target.classList.add('active');
-  if(nav) nav.classList.add('active');
-  
-  const titles = {
-    dashboard:['Dashboard','Overview'], composer:['Composer','Write Posts'], 
-    calendar:['Calendar','Schedule'], scheduled:['Scheduled Posts','Manage'],
-    trends:['Viral Trends','Track'], optimal:['Optimal Times','Strategy'],
-    strategy:['Marketing Strategy','Roadmap'], settings:['Settings','Configure']
-  };
-  const t = titles[pageId] || ['App',''];
-  document.getElementById('pageTitle').innerText = t[0];
-  document.getElementById('pageSubtitle').innerText = t[1];
+function toggleHashtag(el) {
+    el.classList.toggle('selected');
 }
-
-// --- POSTING FUNCTIONS ---
 function handleFileUpload(event) {
-  const preview = document.getElementById('filePreview');
-  if(!preview) return;
-  preview.innerHTML = '';
-  for(let i=0; i<event.target.files.length; i++) {
-    preview.innerHTML += `<div style="color:#94A3B8;background:#334155;padding:4px 10px;border-radius:6px;font-size:12px;margin-right:5px;">📎 ${event.target.files[i].name}</div>`;
-  }
+    const files = event.target.files;
+    const preview = document.getElementById('filePreview');
+    preview.innerHTML = '';
+    for (let i = 0; i < files.length; i++) {
+        const div = document.createElement('div');
+        div.style.cssText = 'background:var(--bg-input);border-radius:8px;padding:8px 12px;font-size:12px;display:flex;align-items:center;gap:6px;';
+        div.innerHTML = `📎 ${files[i].name} <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;">✕</button>`;
+        preview.appendChild(div);
+    }
+    if (files.length > 0) document.getElementById('previewImage').innerHTML = '📸 ' + files.length + ' file(s) attached';
+}
+function addLinkToPost() {
+    const t = document.getElementById('postContent');
+    t.value += '\n🔗 https://www.profsolar.co.za';
+    t.dispatchEvent(new Event('input'));
+}
+function addPollToPost() {
+    const t = document.getElementById('postContent');
+    t.value += '\n📊 POLL: What\'s your biggest concern about going solar?\nA) Cost B) Maintenance C) Reliability D) Aesthetics\nVote below! 👇';
+    t.dispatchEvent(new Event('input'));
+}
+function addEmoji() {
+    const e = ['☀️', '⚡', '💰', '🏠', '🔋', '🌍', '💚', '🎯', '📈', '🔥', '👍', '💪', '🇿🇦', '✨', '🌟'];
+    const t = document.getElementById('postContent');
+    t.value += e[Math.floor(Math.random() * e.length)];
+    t.dispatchEvent(new Event('input'));
+}
+function aiSuggestContent() {
+    const suggestions = [
+        "☀️ LOAD SHEDDING UPDATE: Don't get caught in the dark again!\nA Prof Solar 5kW system with battery backup keeps your lights on, fridge running, and WiFi connected through ANY stage of load shedding.\n💰 Starting from just R89,000\n📊 Save up to R2,500/month\n⚡ Installation in just 2 days\n👉 Get your FREE quote today: www.profsolar.co.za\n#LoadShedding #SolarEnergy #ProfSolar #SouthAfrica",
+        "🤔 THINKING ABOUT SOLAR? Here's what most installers won't tell you:\n✅ Not all panels are equal - we use Tier 1 panels only\n✅ Battery backup is ESSENTIAL for load shedding\n✅ Your ROI is typically 3-5 years in SA\n✅ Government tax incentives available NOW\n✅ We handle ALL paperwork & approvals\nDon't just go solar - go Prof Solar! ☀️\n📞 Call us: 0800 PROF SOLAR\n🌐 www.profsolar.co.za\n#SolarTips #ProfSolar #GoSolar #RenewableEnergy",
+        "📊 REAL RESULTS from a REAL Prof Solar customer:\n📍 Location: Sandton, Johannesburg\n🏠 System: 8kW + 10kWh Battery\n📅 Installed: March 2024\n\n💡 Before Solar:\n• Monthly bill: R4,200\n• Load shedding: 4-6 hours daily\n• Generator costs: R800/month\n\n☀️ After Solar:\n• Monthly bill: R350\n• Load shedding impact: ZERO\n• Generator: SOLD\n\n💰 Total savings in 10 months: R38,500!\nWant results like this? 👇\nwww.profsolar.co.za\n#SolarResults #ProfSolar #CustomerSuccess"
+    ];
+    const suggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+    document.getElementById('postContent').value = suggestion;
+    document.getElementById('postContent').dispatchEvent(new Event('input'));
+    showToast('AI content suggestion loaded!', 'info');
+}
+function useSuggestion(el) {
+    document.getElementById('postContent').value = el.querySelector('p').textContent;
+    document.getElementById('postContent').dispatchEvent(new Event('input'));
+    showToast('Content loaded into composer!', 'success');
+}
+function useTrendTemplate(el) {
+    document.getElementById('postContent').value = el.querySelector('h4').textContent + '\n' + el.querySelector('p').textContent;
+    document.getElementById('postContent').dispatchEvent(new Event('input'));
+    switchPage('composer');
+    showToast('Template loaded! Customize and publish.', 'success');
+}
+function useIdea(el) {
+    document.getElementById('postContent').value = el.querySelector('h4').textContent + '\n' + el.querySelector('p').textContent;
+    document.getElementById('postContent').dispatchEvent(new Event('input'));
+    switchPage('composer');
+    showToast('Idea loaded into composer!', 'success');
+}
+function refreshSuggestions() {
+    showToast('AI suggestions refreshed!', 'info');
+}
+function openComposer() {
+    switchPage('composer');
 }
 
+// ==================== REAL API INTEGRATION ====================
 async function publishPost() {
-  const content = document.getElementById('postContent').value;
-  if(!content.trim()) { alert("Please write something first."); return; }
-
-  const formData = new FormData();
-  formData.append('content', content);
-  formData.append('postType', document.getElementById('postType')?.value || 'feed');
-  
-  const fileInput = document.getElementById('fileInput');
-  if(fileInput) for(let i=0; i<fileInput.files.length; i++) formData.append('media', fileInput.files[i]);
-
-  try {
-    const res = await fetch(API_URL + '/api/posts', { method: 'POST', body: formData });
-    const result = await res.json();
-    if(result.success) {
-      alert("✅ Published successfully to Facebook!");
-      document.getElementById('postContent').value = "";
-      document.getElementById('previewContent').textContent = "...";
-      if(document.getElementById('filePreview')) document.getElementById('filePreview').innerHTML = "";
-      fetchData();
-    } else {
-      alert("❌ Failed: " + (result.error || "Check Render logs"));
+    const content = document.getElementById('postContent').value;
+    const fileInput = document.getElementById('fileInput');
+    const postType = document.getElementById('postType').value;
+    
+    if (!content.trim()) {
+        showToast('Please write content first!', 'error');
+        return;
     }
-  } catch(err) {
-    alert("⚠️ Connection failed. Is your Render server awake? (Wait 60s & try again)");
-  }
+
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('postType', postType);
+    for (let i = 0; i < fileInput.files.length; i++) {
+        formData.append('media', fileInput.files[i]);
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/api/posts', { 
+            method: 'POST', 
+            body: formData 
+        });
+        const result = await response.json();
+        if (result.success) {
+            showToast('🚀 Post published to Facebook!', 'success');
+            document.getElementById('postContent').value = '';
+            document.getElementById('previewContent').textContent = 'Your post content will appear here as you type...';
+            document.getElementById('filePreview').innerHTML = '';
+            fileInput.value = '';
+            loadPosts();
+        } else {
+            showToast('❌ Failed: ' + (result.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        showToast('❌ Connection Error. Is the server running?', 'error');
+        console.error(error);
+    }
 }
 
 function schedulePost() {
-  const modal = document.getElementById('scheduleModal');
-  if(modal) modal.classList.add('active');
+    const content = document.getElementById('postContent').value;
+    if (!content.trim()) {
+        showToast('Please write something before scheduling!', 'error');
+        return;
+    }
+    document.getElementById('modalDate').valueAsDate = new Date();
+    document.getElementById('scheduleModal').classList.add('active');
 }
 
-function confirmSchedule() {
-  alert("Scheduled! (Full cron scheduling requires backend setup)");
-  closeModal('scheduleModal');
+async function confirmSchedule() {
+    const content = document.getElementById('postContent').value;
+    const date = document.getElementById('modalDate').value;
+    const time = document.getElementById('modalTime').value;
+    const postType = document.getElementById('modalPostType').value;
+    
+    if (!date || !time) {
+        showToast('Please select a date and time!', 'error');
+        return;
+    }
+
+    const scheduledTime = `${date}T${time}:00`;
+    const formData = new FormData();
+    formData.append('content', content);
+    formData.append('scheduledTime', scheduledTime);
+    formData.append('postType', postType);
+
+    try {
+        const response = await fetch('http://localhost:3000/api/posts', { 
+            method: 'POST', 
+            body: formData 
+        });
+        const result = await response.json();
+        if (result.success) {
+            showToast(`⏰ Scheduled for ${scheduledTime.replace('T', ' ')}`, 'success');
+            closeModal('scheduleModal');
+            document.getElementById('postContent').value = '';
+            document.getElementById('previewContent').textContent = 'Your post content will appear here as you type...';
+            loadPosts();
+        } else {
+            showToast('❌ Failed: ' + (result.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        showToast('❌ Connection Error', 'error');
+        console.error(error);
+    }
 }
 
-// --- UTILITIES ---
-function toggleSidebar() { document.getElementById('sidebar')?.classList.toggle('open'); }
-function toggleAutoPost() { 
-  const t = document.getElementById('autoPostToggle'); 
-  t.classList.toggle('active');
-  showToast(t.classList.contains('active') ? "Enabled" : "Disabled", "info"); 
-}
-function closeModal(id) { document.getElementById(id)?.classList.remove('active'); }
-function toggleHashtag(el) { el.classList.toggle('selected'); }
-function saveAutoPostConfig() { showToast("Saved!", "success"); }
-function generateWeekPosts() { showToast("Generated 7 drafts", "success"); }
-function refreshSuggestions() { showToast("Updated", "info"); }
-function generateMoreIdeas() { showToast("Refreshing...", "info"); setTimeout(()=>showToast("Ready!", "success"), 1000); }
-function refreshTrends() { showToast("Updated", "info"); }
-
-function addLinkToPost() { const t=document.getElementById('postContent'); if(t){t.value+='\n🔗 https://www.profsolar.co.za'; t.dispatchEvent(new Event('input'));} }
-function aiSuggestContent() { 
-  const s=["☀️ LOAD SHEDDING UPDATE:\nProf Solar backup saves R2,500/mo.\nStarting R89k. www.profsolar.co.za #LoadShedding","🤔 THINKING ABOUT SOLAR?\n✅ Tier 1 Panels ✅ Battery Backup\n✅ Gov Tax Incentives\nGo Prof Solar! ☀️"];
-  const ta=document.getElementById('postContent'); if(ta){ta.value=s[Math.floor(Math.random()*s.length)]; ta.dispatchEvent(new Event('input')); showToast("AI Loaded","info");}
-}
-function useSuggestion(el) { 
-  const ta=document.getElementById('postContent'); const text=el.querySelector('p')?.textContent; 
-  if(ta&&text){ta.value=text; ta.dispatchEvent(new Event('input')); showToast("Loaded","success");}
+function saveDraft() {
+    const content = document.getElementById('postContent').value;
+    if (!content.trim()) {
+        showToast('Write something first!', 'error');
+        return;
+    }
+    showToast('📝 Draft saved!', 'success');
 }
 
-// --- CHARTS & CALENDAR ---
-function renderCalendar() {
-  const grid = document.getElementById('calendarGrid');
-  if(!grid) return;
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const d = new Date();
-  document.getElementById('calendarTitle').innerText = `${months[d.getMonth()]} ${d.getFullYear()}`;
-  
-  let html = '<div class="calendar-day-header">Sun</div><div class="calendar-day-header">Mon</div><div class="calendar-day-header">Tue</div><div class="calendar-day-header">Wed</div><div class="calendar-day-header">Thu</div><div class="calendar-day-header">Fri</div><div class="calendar-day-header">Sat</div>';
-  const start = d.getDay();
-  const daysInMonth = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
-  for(let i=0;i<start;i++) html += '<div class="calendar-day" style="opacity:0.3;"></div>';
-  for(let i=1; i<=daysInMonth; i++) {
-    const isToday = i===d.getDate();
-    html += `<div class="calendar-day ${isToday?'today':''}" onclick="document.getElementById('scheduleDate').value='${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}'; switchPage('composer')">
-      <div class="day-number">${i <= daysInMonth ? i : ''}</div>
-    </div>`;
-  }
-  grid.innerHTML = html;
+async function loadPosts() {
+    try {
+        const response = await fetch('http://localhost:3000/api/posts');
+        const data = await response.json();
+        if (data.success) {
+            renderPostsList(data.posts);
+            const scheduledCount = data.posts.filter(p => p.status === 'scheduled').length;
+            const badge = document.getElementById('scheduledCount');
+            if (badge) badge.textContent = scheduledCount;
+        }
+    } catch (error) {
+        console.error('Failed to load posts:', error);
+    }
 }
 
-function renderHeatmap() {
-  const grid = document.getElementById('timeHeatmap');
-  if(!grid) return;
-  let h = '';
-  for(let r=0;r<15;r++) for(let c=0;c<7;c++) h += `<div class="time-cell heat-${Math.floor(Math.random()*4)}"></div>`;
-  grid.innerHTML = h;
-}
+function renderPostsList(posts) {
+    const list = document.getElementById('postsList');
+    if (!list) return;
+    list.innerHTML = '';
 
-function initCharts() {
-  if(window.Chart) {
-    if(document.getElementById('followerChart')) new Chart(document.getElementById('followerChart'), { type:'line', data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{data:[12000,12200,12500,12800,12847,12900,13000], borderColor:'#F59E0B', fill:true, tension:0.4}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false,grid:{color:'#334155'}}}}} );
-    if(document.getElementById('engagementChart')) new Chart(document.getElementById('engagementChart'), { type:'bar', data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{data:[300,450,500,600,700,800,900], backgroundColor:'rgba(245,158,11,0.7)', borderRadius:6}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false,grid:{color:'#334155'}}}}} );
-    if(document.getElementById('contentMixChart')) new Chart(document.getElementById('contentMixChart'), { type:'doughnut', data:{labels:['Educ','Promo','Engage','Test'], datasets:[{data:[35,20,25,20], backgroundColor:['#3B82F6','#F59E0B','#8B5CF6','#10B981'], borderWidth:0}]}, options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{color:'#94A3B8'}}}}} );
-    if(document.getElementById('reachChart')) new Chart(document.getElementById('reachChart'), { type:'line', data:{labels:['W1','W2','W3','W4'], datasets:[{label:'Reach',data:[40000,45000,48000,52000], borderColor:'#F59E0B',fill:true,tension:0.4},{label:'Impressions',data:[120000,135000,140000,156000], borderColor:'#3B82F6',fill:true,tension:0.4}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94A3B8'}}},scales:{x:{ticks:{color:'#64748B'},grid:{display:false}},y:{ticks:{color:'#64748B'},grid:{color:'#334155'}}}}} );
-    if(document.getElementById('autoPostChart')) new Chart(document.getElementById('autoPostChart'), { type:'bar', data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{data:[2,2,2,2,2,1,1],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:6},{data:[45,52,38,61,55,32,28],backgroundColor:'rgba(16,185,129,0.7)',borderRadius:6}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94A3B8'}}},scales:{x:{ticks:{color:'#64748B'},grid:{display:false}},y:{ticks:{color:'#64748B'},grid:{color:'#334155'}}}}} );
-  }
-}
+    if (posts.length === 0) {
+        list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">No posts yet. Create one!</div>';
+        return;
+    }
 
-function renderScheduledPosts(posts) {
-  const list = document.getElementById('postsList');
-  if(!list) return;
-  list.innerHTML = '';
-  if(posts.length===0) { list.innerHTML='<div style="padding:20px;text-align:center;color:#64748B;">No posts yet.</div>'; return; }
-  posts.forEach(p=>{
-    const date = p.scheduled_time ? new Date(p.scheduled_time).toLocaleString() : (p.published_at ? new Date(p.published_at).toLocaleString() : 'Just now');
-    const cls = p.status==='published'?'published':(p.status==='scheduled'?'scheduled':'draft');
-    list.innerHTML += `<div class="scheduled-post" data-status="${p.status}"><div class="post-status ${cls}"></div><div class="post-info"><h4>${p.content.substring(0,50)}${p.content.length>50?'...':''}</h4><p>Status: <strong>${p.status.toUpperCase()}</strong></p><div class="post-meta"><span>📅 ${date}</span>${p.fb_post_id?`<span>✅ FB ID: ${p.fb_post_id}</span>`:''}${p.error_message?`<span style="color:#EF4444">❌ ${p.error_message}</span>`:''}</div></div><div class="post-actions"><button class="btn btn-outline btn-sm" onclick="deletePostById(${p.id})">Delete</button></div></div>`;
-  });
+    posts.forEach(post => {
+        const date = post.scheduled_time ? new Date(post.scheduled_time).toLocaleString() : 
+                      (post.published_at ? new Date(post.published_at).toLocaleString() : 'Just now');
+        const statusClass = post.status === 'published' ? 'published' : 
+                           (post.status === 'scheduled' ? 'scheduled' : 'draft');
+        
+        list.innerHTML += `
+        <div class="scheduled-post" data-status="${post.status}">
+            <div class="post-status ${statusClass}"></div>
+            <div class="post-info">
+                <h4>${post.content.substring(0, 60)}${post.content.length > 60 ? '...' : ''}</h4>
+                <p>Status: <strong>${post.status.toUpperCase()}</strong></p>
+                <div class="post-meta">
+                    <span>📅 ${date}</span>
+                    ${post.fb_post_id ? `<span>✅ FB ID: ${post.fb_post_id}</span>` : ''}
+                    ${post.error_message ? `<span style="color:var(--danger)">❌ ${post.error_message}</span>` : ''}
+                </div>
+            </div>
+            <div class="post-actions">
+                <button class="btn btn-outline btn-sm" onclick="deletePostById(${post.id})">Delete</button>
+            </div>
+        </div>`;
+    });
 }
 
 async function deletePostById(id) {
-  if(!confirm('Delete this post?')) return;
-  try { await fetch(API_URL+'/api/posts/'+id, {method:'DELETE'}); showToast('Deleted','success'); fetchData(); }
-  catch(e) { showToast('Failed to delete','error'); }
+    if (!confirm('Delete this post?')) return;
+    try {
+        await fetch(`http://localhost:3000/api/posts/${id}`, { method: 'DELETE' });
+        showToast('🗑️ Post deleted', 'success');
+        loadPosts();
+    } catch (error) {
+        showToast('❌ Failed to delete', 'error');
+    }
 }
 
+// ==================== CALENDAR ====================
+function renderCalendar() {
+    const grid = document.getElementById('calendarGrid');
+    const title = document.getElementById('calendarTitle');
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    title.textContent = months[currentMonth] + ' ' + currentYear;
+    let html = '';
+    days.forEach(d => html += `<div class="calendar-day-header">${d}</div>`);
+    
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const today = new Date();
+    
+    // Generate random post data
+    const postDays = {};
+    for (let i = 0; i < 15; i++) {
+        const day = Math.floor(Math.random() * daysInMonth) + 1;
+        if (!postDays[day]) postDays[day] = [];
+        postDays[day].push(['scheduled','published','draft'][Math.floor(Math.random()*3)]);
+    }
+    
+    for (let i = 0; i < firstDay; i++) html += '<div class="calendar-day" style="opacity:0.3;"></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+        let classes = 'calendar-day';
+        if (isToday) classes += ' today';
+        if (postDays[d]) classes += ' has-post';
+        let dots = '';
+        if (postDays[d]) postDays[d].forEach(type => dots += `<span class="post-dot ${type}"></span>`);
+        html += `<div class="${classes}" onclick="calendarDayClick(${d})"><div class="day-number">${d}</div>${dots}</div>`;
+    }
+    grid.innerHTML = html;
+}
+
+function changeMonth(dir) {
+    if (dir === 0) {
+        currentMonth = new Date().getMonth();
+        currentYear = new Date().getFullYear();
+    } else {
+        currentMonth += dir;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+    }
+    renderCalendar();
+}
+
+function calendarDayClick(day) {
+    document.getElementById('scheduleDate').value = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    switchPage('composer');
+    showToast(`Selected ${day}/${currentMonth+1}/${currentYear}. Compose your post!`, 'info');
+}
+
+// ==================== HEATMAP ====================
+function renderHeatmap() {
+    const grid = document.getElementById('timeHeatmap');
+    const hours = ['6AM','7AM','8AM','9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM','6PM','7PM','8PM','9PM','10PM'];
+    const heatData = [
+        [1,1,1,0,0,0,1,1,1,0,0,1,2,3,3,3,2],
+        [2,2,1,0,0,0,1,2,1,0,0,1,3,3,3,3,2],
+        [2,3,2,1,0,0,1,1,2,0,0,1,2,3,4,3,2],
+        [2,2,2,1,0,0,1,2,1,0,0,1,3,3,3,3,2],
+        [2,3,2,1,0,0,1,1,2,1,0,2,3,4,4,3,2],
+        [1,1,2,2,1,1,2,2,2,1,1,2,2,2,2,2,1],
+        [0,0,1,1,1,1,1,1,1,1,1,1,2,2,2,2,1]
+    ];
+    let html = '';
+    for (let h = 0; h < hours.length; h++) {
+        for (let d = 0; d < 7; d++) {
+            html += `<div class="time-cell heat-${heatData[d][h]}" title="${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d]} ${hours[h]}">${hours[h]}</div>`;
+        }
+    }
+    grid.innerHTML = html;
+}
+
+// ==================== UTILS ====================
 function filterPosts(status, btn) {
-  document.querySelectorAll('#page-scheduled .tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.scheduled-post').forEach(post=>{ post.style.display=(status==='all'||post.dataset.status===status)?'flex':'none'; });
-}
-function toggleCheck(cb) { cb.closest('.checklist-item')?.classList.toggle('completed', cb.checked); }
-function showToast(msg, type="success") {
-  const t=document.getElementById('toast');
-  document.getElementById('toastIcon').innerText = type==='success'?'✅':type==='error'?'❌':'ℹ️';
-  document.getElementById('toastMessage').innerText = msg;
-  t.className = `toast show ${type}`;
-  setTimeout(()=>t.classList.remove('show'),3000);
+    document.querySelectorAll('#page-scheduled .tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.scheduled-post').forEach(post => {
+        post.style.display = (status === 'all' || post.dataset.status === status) ? 'flex' : 'none';
+    });
 }
 
-// RUN ON LOAD
-document.addEventListener('DOMContentLoaded', init);
+function toggleCheck(checkbox) {
+    const item = checkbox.closest('.checklist-item');
+    checkbox.checked ? item.classList.add('completed') : item.classList.remove('completed');
+    updateChecklistProgress();
+}
+
+function updateChecklistProgress() {
+    const total = document.querySelectorAll('.checklist-item').length;
+    const completed = document.querySelectorAll('.checklist-item.completed').length;
+    const pct = (completed / total * 100).toFixed(1);
+    const bar = document.getElementById('checklistBar');
+    const text = document.getElementById('checklistProgress');
+    if (bar) bar.style.width = pct + '%';
+    if (text) text.textContent = completed + '/' + total + ' completed';
+}
+
+function toggleAutoPost() {
+    const toggle = document.getElementById('autoPostToggle');
+    toggle.classList.toggle('active');
+    showToast(toggle.classList.contains('active') ? '✅ Auto-posting enabled!' : '⏸️ Auto-posting disabled.', 'info');
+}
+
+function saveAutoPostConfig() {
+    showToast('💾 Auto-post configuration saved!', 'success');
+}
+
+function generateWeekPosts() {
+    showToast('📅 Generated 14 posts for the upcoming week!', 'success');
+}
+
+function filterIdeas(type, btn) {
+    document.querySelectorAll('#page-content .tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#ideasList .suggestion-card').forEach(card => {
+        card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+    });
+}
+
+function generateMoreIdeas() {
+    showToast('🔄 Generating fresh content ideas...', 'info');
+    setTimeout(() => {
+        showToast('✨ 8 new content ideas generated!', 'success');
+    }, 1500);
+}
+
+function refreshTrends() {
+    showToast('🔄 Refreshing trending topics...', 'info');
+    setTimeout(() => {
+        showToast('🔥 Trends updated!', 'success');
+    }, 1000);
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastIcon').textContent = { 
+        success: '✅', 
+        error: '❌', 
+        info: 'ℹ️' 
+    }[type] || '✅';
+    document.getElementById('toastMessage').textContent = message;
+    toast.className = 'toast ' + type;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ==================== CHARTS ====================
+function initCharts() {
+    const followerCtx = document.getElementById('followerChart');
+    if (followerCtx) {
+        charts.follower = new Chart(followerCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 30}, (_, i) => `Jan ${i+1}`),
+                datasets: [{
+                    label: 'Followers',
+                    data: [9800,9950,10100,10250,10400,10520,10680,10800,10950,11100,11200,11350,11500,11620,11750,11880,11950,12050,12150,12250,12350,12450,12520,12600,12680,12720,12780,12810,12830,12847],
+                    borderColor: '#F59E0B',
+                    backgroundColor: 'rgba(245,158,11,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } },
+                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
+                }
+            }
+        });
+    }
+    
+    const engCtx = document.getElementById('engagementChart');
+    if (engCtx) {
+        charts.engagement = new Chart(engCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [
+                    { label: 'Likes', data: [456, 523, 612, 734], backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6 },
+                    { label: 'Comments', data: [89, 112, 134, 167], backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 6 },
+                    { label: 'Shares', data: [45, 67, 89, 134], backgroundColor: 'rgba(16,185,129,0.7)', borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true, pointStyle: 'circle' } } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748B' } },
+                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
+                }
+            }
+        });
+    }
+    
+    const mixCtx = document.getElementById('contentMixChart');
+    if (mixCtx) {
+        charts.contentMix = new Chart(mixCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Educational', 'Promotional', 'Engagement', 'Testimonial'],
+                datasets: [{
+                    data: [35, 20, 25, 20],
+                    backgroundColor: ['#3B82F6', '#F59E0B', '#8B5CF6', '#10B981'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#94A3B8', usePointStyle: true, pointStyle: 'circle', padding: 15 }
+                    }
+                }
+            }
+        });
+    }
+}
+
+function initAnalyticsCharts() {
+    if (charts.reach) return;
+    const reachCtx = document.getElementById('reachChart');
+    if (reachCtx) {
+        charts.reach = new Chart(reachCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan 1','Jan 5','Jan 9','Jan 13','Jan 17','Jan 21','Jan 25','Jan 29'],
+                datasets: [
+                    { label: 'Reach', data: [3200,4100,3800,5200,4900,6100,5800,7200], borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.4 },
+                    { label: 'Impressions', data: [8500,10200,9800,13400,12100,15600,14200,18900], borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.05)', fill: true, tension: 0.4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true } } },
+                scales: {
+                    x: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } },
+                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
+                }
+            }
+        });
+    }
+}
+
+function initAutoPostChart() {
+    if (charts.autoPost) return;
+    const ctx = document.getElementById('autoPostChart');
+    if (ctx) {
+        charts.autoPost = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                datasets: [
+                    { label: 'Auto Posts', data: [2,2,2,2,2,1,1], backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6 },
+                    { label: 'Avg Engagement', data: [45,52,38,61,55,32,28], backgroundColor: 'rgba(16,185,129,0.7)', borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true } } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748B' } },
+                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
+                }
+            }
+        });
+    }
+}
+
+function updateFollowerChart(period) {
+    document.querySelectorAll('#page-dashboard .tabs .tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    if (charts.follower) {
+        if (period === '90d') {
+            charts.follower.data.labels = Array.from({length: 90}, (_, i) => {
+                const d = new Date();
+                d.setDate(d.getDate() - 89 + i);
+                return d.toLocaleDateString('en-ZA', {month:'short', day:'numeric'});
+            });
+            charts.follower.data.datasets[0].data = Array.from({length: 90}, (_, i) => 8000 + i * 54 + Math.random() * 100);
+        } else {
+            charts.follower.data.labels = Array.from({length: 30}, (_, i) => `Jan ${i+1}`);
+            charts.follower.data.datasets[0].data = [9800,9950,10100,10250,10400,10520,10680,10800,10950,11100,11200,11350,11500,11620,11750,11880,11950,12050,12150,12250,12350,12450,12520,12600,12680,12720,12780,12810,12830,12847];
+        }
+        charts.follower.update();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initCharts();
+    renderCalendar();
+    renderHeatmap();
+    const today = new Date().toISOString().split('T')[0];
+    const scheduleDate = document.getElementById('scheduleDate');
+    if (scheduleDate) scheduleDate.value = today;
+    animateValue('followerCount', 0, 12847, 1500);
+    loadPosts();
+});
+
+function animateValue(id, start, end, duration) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const range = end - start;
+    const startTime = performance.now();
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(start + range * eased).toLocaleString();
+        if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+    });
+});
 </script>
 </body>
 </html>
-
