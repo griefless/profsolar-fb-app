@@ -442,233 +442,232 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 
 <script>
-// 🔧 SAFE CONFIGURATION & FIXES
+// 🔑 LIVE BACKEND CONFIGURATION
+const API_URL = 'https://profsolar-backend.onrender.com';
 
 function init() {
-    console.log("App Initialized Successfully");
-    
-    // Add listeners for input fields
-    const ta = document.getElementById('postContent');
-    if(ta) ta.addEventListener('input', function() { 
-        document.getElementById('previewContent').textContent = this.value || '...'; 
-    });
+  console.log("Prof Solar App Initialized ✅");
+  
+  // Initialize UI first so pages load immediately
+  renderCalendar();
+  renderHeatmap();
+  initCharts();
+  
+  const today = document.getElementById('scheduleDate');
+  if(today) today.value = new Date().toISOString().split('T')[0];
 
-    // Initialize Charts and Calendar once safe
-    try {
-        renderCalendar();
-        renderHeatmap();
-        initCharts();
-        
-        // Set today's date
-        const dInput = document.getElementById('scheduleDate');
-        if(dInput) dInput.value = new Date().toISOString().split('T')[0];
-        
-        // Trigger data fetch
-        fetchAnalytics();
-    } catch(e) {
-        console.warn("Render Warning:", e);
-    }
+  // Fetch real data with safety timeout
+  setTimeout(() => fetchData(), 300);
 }
 
-// --- Navigation ---
+async function fetchData() {
+  try {
+    // Load Posts List
+    const res = await fetch(API_URL + '/api/posts');
+    const data = await res.json();
+    if(data.success && data.posts) {
+      renderScheduledPosts(data.posts);
+      const count = data.posts.filter(p => p.status === 'scheduled').length;
+      const badge = document.getElementById('scheduledCount');
+      if(badge) badge.innerText = count;
+    }
+
+    // Load Analytics
+    const analyticsRes = await fetch(API_URL + '/api/analytics');
+    const analyticsData = await analyticsRes.json();
+    updateDashboard(analyticsData.stats);
+    
+  } catch(e) {
+    console.warn("Backend connection pending (Render may be waking up)...", e.message);
+    // Retry once after 10 seconds if Render is still spinning up
+    setTimeout(fetchData, 10000);
+  }
+}
+
+function updateDashboard(stats) {
+  if(!stats) return;
+  const map = {
+    'followerCount': stats.followers?.toLocaleString() || '---',
+    'stat-reach': stats.reach?.toLocaleString() || '---',
+    'stat-engagement-rate': (stats.engagementRate || 0) + '%',
+    'stat-posts-month': stats.postsThisMonth ?? '---',
+    'stat-clicks': stats.websiteClicks?.toLocaleString() || '---',
+    'stat-leads': stats.leadActions ?? '---'
+  };
+  for(const [id, val] of Object.entries(map)) {
+    const el = document.getElementById(id);
+    if(el) el.innerText = val;
+  }
+}
+
+// --- NAVIGATION ---
 function switchPage(pageId) {
-    // Remove active class from all sections and nav items
-    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    
-    // Activate target
-    const section = document.getElementById('page-' + pageId);
-    const navItem = document.querySelector(`[data-page="${pageId}"]`);
-    
-    if(section) section.classList.add('active');
-    if(navItem) navItem.classList.add('active');
-    
-    // Update Title
-    const titles = {
-        dashboard: ['Dashboard', 'Overview'],
-        composer: ['Composer', 'Write Posts'],
-        calendar: ['Calendar', 'Schedule'],
-        analytics: ['Analytics', 'Performance']
-    };
-    const t = titles[pageId] || ['App',''];
-    document.getElementById('pageTitle').innerText = t[0];
-    document.getElementById('pageSubtitle').innerText = t[1];
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  const target = document.getElementById('page-' + pageId);
+  const nav = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+  
+  if(target) target.classList.add('active');
+  if(nav) nav.classList.add('active');
+  
+  const titles = {
+    dashboard:['Dashboard','Overview'], composer:['Composer','Write Posts'], 
+    calendar:['Calendar','Schedule'], scheduled:['Scheduled Posts','Manage'],
+    trends:['Viral Trends','Track'], optimal:['Optimal Times','Strategy'],
+    strategy:['Marketing Strategy','Roadmap'], settings:['Settings','Configure']
+  };
+  const t = titles[pageId] || ['App',''];
+  document.getElementById('pageTitle').innerText = t[0];
+  document.getElementById('pageSubtitle').innerText = t[1];
 }
 
-// --- Actions ---
-function openComposer() { switchPage('composer'); }
-function toggleAutoPost() { 
-    const t = document.getElementById('autoPostToggle');
-    t.classList.toggle('active');
-    showToast(t.classList.contains('active') ? "Enabled" : "Disabled", "info");
-}
-function saveAutoPostConfig() { showToast("Saved!", "success"); }
-
-// --- Data Fetching ---
-async function fetchAnalytics() {
-    // Try fetching real data
-    try {
-        // Assuming Render URL is available, otherwise fallback to mock
-        // If the user hasn't pushed yet, this fails silently and keeps static data
-        console.log("Checking backend...");
-    } catch(e) {}
-}
-
-// --- Post Composer Logic ---
+// --- POSTING FUNCTIONS ---
 function handleFileUpload(event) {
-    const preview = document.getElementById('filePreview');
-    preview.innerHTML = '';
-    for (let i = 0; i < event.target.files.length; i++) {
-        const div = document.createElement('div');
-        div.style.cssText = 'color:#94A3B8; background:#334155; padding:4px 10px; border-radius:6px; font-size:12px; margin-right:5px;';
-        div.innerText = "📎 " + event.target.files[i].name;
-        preview.appendChild(div);
+  const preview = document.getElementById('filePreview');
+  if(!preview) return;
+  preview.innerHTML = '';
+  for(let i=0; i<event.target.files.length; i++) {
+    preview.innerHTML += `<div style="color:#94A3B8;background:#334155;padding:4px 10px;border-radius:6px;font-size:12px;margin-right:5px;">📎 ${event.target.files[i].name}</div>`;
+  }
+}
+
+async function publishPost() {
+  const content = document.getElementById('postContent').value;
+  if(!content.trim()) { alert("Please write something first."); return; }
+
+  const formData = new FormData();
+  formData.append('content', content);
+  formData.append('postType', document.getElementById('postType')?.value || 'feed');
+  
+  const fileInput = document.getElementById('fileInput');
+  if(fileInput) for(let i=0; i<fileInput.files.length; i++) formData.append('media', fileInput.files[i]);
+
+  try {
+    const res = await fetch(API_URL + '/api/posts', { method: 'POST', body: formData });
+    const result = await res.json();
+    if(result.success) {
+      alert("✅ Published successfully to Facebook!");
+      document.getElementById('postContent').value = "";
+      document.getElementById('previewContent').textContent = "...";
+      if(document.getElementById('filePreview')) document.getElementById('filePreview').innerHTML = "";
+      fetchData();
+    } else {
+      alert("❌ Failed: " + (result.error || "Check Render logs"));
     }
-}
-
-function addLinkToPost() { 
-    const t=document.getElementById('postContent'); 
-    // Use template literal or \n
-    t.value += `\n🔗 https://www.profsolar.co.za`; 
-    t.dispatchEvent(new Event('input')); 
-}
-
-function aiSuggestContent() { 
-    const s = [
-        "☀️ LOAD SHEDDING UPDATE:\nProf Solar 5kW system backup saves R2,500/mo.\nStarting R89k. www.profsolar.co.za #LoadShedding",
-        "🤔 THINKING ABOUT SOLAR?\n✅ Tier 1 Panels ✅ Battery Backup\n✅ Gov Tax Incentives\nDon't go solar - go Prof Solar! ☀️"
-    ];
-    const choice = s[Math.floor(Math.random()*s.length)];
-    document.getElementById('postContent').value = choice; 
-    document.getElementById('postContent').dispatchEvent(new Event('input')); 
-    showToast("AI Suggestion Loaded", "info");
-}
-
-function publishPost() {
-    const content = document.getElementById('postContent').value;
-    if (!content.trim()) { alert("Please write something first!"); return; }
-    
-    // Send to Backend API
-    const formData = new FormData();
-    formData.append('content', content);
-    formData.append('postType', document.getElementById('postType').value);
-    
-    // NOTE: This requires your Render backend to be live and CORS enabled
-    fetch('https://profsolar-backend.onrender.com/api/posts', { method: 'POST', body: formData })
-    .then(res => res.json())
-    .then(data => {
-        if(data.success) {
-            alert("✅ Published to Facebook!");
-            document.getElementById('postContent').value = '';
-            document.getElementById('previewContent').textContent = '...';
-        } else {
-            alert("❌ Failed: Check backend logs");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("⚠️ Note: If posting now only creates a draft, it's because the connection timed out.");
-    });
+  } catch(err) {
+    alert("⚠️ Connection failed. Is your Render server awake? (Wait 60s & try again)");
+  }
 }
 
 function schedulePost() {
-    alert("Opened Schedule Modal (Connect API for full scheduling)");
+  const modal = document.getElementById('scheduleModal');
+  if(modal) modal.classList.add('active');
 }
 
-function toggleCheck(checkbox) { 
-    const item = checkbox.closest('.checklist-item'); 
-    checkbox.checked ? item.classList.add('completed') : item.classList.remove('completed'); 
+function confirmSchedule() {
+  alert("Scheduled! (Full cron scheduling requires backend setup)");
+  closeModal('scheduleModal');
 }
 
-// --- Helpers ---
+// --- UTILITIES ---
+function toggleSidebar() { document.getElementById('sidebar')?.classList.toggle('open'); }
+function toggleAutoPost() { 
+  const t = document.getElementById('autoPostToggle'); 
+  t.classList.toggle('active');
+  showToast(t.classList.contains('active') ? "Enabled" : "Disabled", "info"); 
+}
+function closeModal(id) { document.getElementById(id)?.classList.remove('active'); }
+function toggleHashtag(el) { el.classList.toggle('selected'); }
+function saveAutoPostConfig() { showToast("Saved!", "success"); }
+function generateWeekPosts() { showToast("Generated 7 drafts", "success"); }
+function refreshSuggestions() { showToast("Updated", "info"); }
+function generateMoreIdeas() { showToast("Refreshing...", "info"); setTimeout(()=>showToast("Ready!", "success"), 1000); }
+function refreshTrends() { showToast("Updated", "info"); }
+
+function addLinkToPost() { const t=document.getElementById('postContent'); if(t){t.value+='\n🔗 https://www.profsolar.co.za'; t.dispatchEvent(new Event('input'));} }
+function aiSuggestContent() { 
+  const s=["☀️ LOAD SHEDDING UPDATE:\nProf Solar backup saves R2,500/mo.\nStarting R89k. www.profsolar.co.za #LoadShedding","🤔 THINKING ABOUT SOLAR?\n✅ Tier 1 Panels ✅ Battery Backup\n✅ Gov Tax Incentives\nGo Prof Solar! ☀️"];
+  const ta=document.getElementById('postContent'); if(ta){ta.value=s[Math.floor(Math.random()*s.length)]; ta.dispatchEvent(new Event('input')); showToast("AI Loaded","info");}
+}
+function useSuggestion(el) { 
+  const ta=document.getElementById('postContent'); const text=el.querySelector('p')?.textContent; 
+  if(ta&&text){ta.value=text; ta.dispatchEvent(new Event('input')); showToast("Loaded","success");}
+}
+
+// --- CHARTS & CALENDAR ---
 function renderCalendar() {
-    const grid = document.getElementById('calendarGrid');
-    if(!grid) return;
-    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const d = new Date();
-    const month = months[d.getMonth()];
-    document.getElementById('calendarTitle').innerText = `${month} ${d.getFullYear()}`;
-    
-    let html = "";
-    days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    days.forEach(x => html += `<div style="text-align:center;font-size:10px;color:#64748B;">${x}</div>`);
-    
-    for(let i=1; i<=d.getDate()+2; i++) {
-        html += `<div class="calendar-day" style="opacity:${i>d.getDate()?'0.3':'1'}"><div class="day-number">${i <= d.getDate()?i:''}</div></div>`;
-    }
-    grid.innerHTML = html;
+  const grid = document.getElementById('calendarGrid');
+  if(!grid) return;
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const d = new Date();
+  document.getElementById('calendarTitle').innerText = `${months[d.getMonth()]} ${d.getFullYear()}`;
+  
+  let html = '<div class="calendar-day-header">Sun</div><div class="calendar-day-header">Mon</div><div class="calendar-day-header">Tue</div><div class="calendar-day-header">Wed</div><div class="calendar-day-header">Thu</div><div class="calendar-day-header">Fri</div><div class="calendar-day-header">Sat</div>';
+  const start = d.getDay();
+  const daysInMonth = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+  for(let i=0;i<start;i++) html += '<div class="calendar-day" style="opacity:0.3;"></div>';
+  for(let i=1; i<=daysInMonth; i++) {
+    const isToday = i===d.getDate();
+    html += `<div class="calendar-day ${isToday?'today':''}" onclick="document.getElementById('scheduleDate').value='${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}'; switchPage('composer')">
+      <div class="day-number">${i <= daysInMonth ? i : ''}</div>
+    </div>`;
+  }
+  grid.innerHTML = html;
 }
 
 function renderHeatmap() {
-    const grid = document.getElementById('timeHeatmap');
-    if(!grid) return;
-    let html = "";
-    // Simple dummy grid generation
-    for(let r=0; r<15; r++) {
-        for(let c=0; c<7; c++) {
-            const heat = Math.floor(Math.random()*4)+1;
-            html += `<div class="time-cell heat-${heat}"></div>`;
-        }
-    }
-    grid.innerHTML = html;
+  const grid = document.getElementById('timeHeatmap');
+  if(!grid) return;
+  let h = '';
+  for(let r=0;r<15;r++) for(let c=0;c<7;c++) h += `<div class="time-cell heat-${Math.floor(Math.random()*4)}"></div>`;
+  grid.innerHTML = h;
 }
 
-function showToast(msg, type="success") {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMessage').innerText = msg;
-    toast.className = `toast show ${type}`;
-    setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-function closeModal(id) { 
-    const m = document.getElementById(id); 
-    if(m) m.classList.remove('active'); 
-}
-
-// --- Chart Init ---
 function initCharts() {
-    // Follower Chart
-    createChart('followerChart', 'line', [12000,12200,12500,12800,12847], '#F59E0B');
-    // Engagement Chart
-    createChart('engagementChart', 'bar', [300, 450, 500, 700], '#10B981');
-    // Content Mix
-    createChart('contentMixChart', 'doughnut', [35, 20, 25, 20], ['#3B82F6','#F59E0B','#8B5CF6','#10B981']);
-    // Reach Chart
-    createChart('reachChart', 'line', [40000,45000,42000,48000], '#3B82F6');
-    // Auto Post Chart
-    createChart('autoPostChart', 'bar', [2,2,2,2,2,1,1], '#EF4444');
+  if(window.Chart) {
+    if(document.getElementById('followerChart')) new Chart(document.getElementById('followerChart'), { type:'line', data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{data:[12000,12200,12500,12800,12847,12900,13000], borderColor:'#F59E0B', fill:true, tension:0.4}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false,grid:{color:'#334155'}}}}} );
+    if(document.getElementById('engagementChart')) new Chart(document.getElementById('engagementChart'), { type:'bar', data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{data:[300,450,500,600,700,800,900], backgroundColor:'rgba(245,158,11,0.7)', borderRadius:6}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false,grid:{color:'#334155'}}}}} );
+    if(document.getElementById('contentMixChart')) new Chart(document.getElementById('contentMixChart'), { type:'doughnut', data:{labels:['Educ','Promo','Engage','Test'], datasets:[{data:[35,20,25,20], backgroundColor:['#3B82F6','#F59E0B','#8B5CF6','#10B981'], borderWidth:0}]}, options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{color:'#94A3B8'}}}}} );
+    if(document.getElementById('reachChart')) new Chart(document.getElementById('reachChart'), { type:'line', data:{labels:['W1','W2','W3','W4'], datasets:[{label:'Reach',data:[40000,45000,48000,52000], borderColor:'#F59E0B',fill:true,tension:0.4},{label:'Impressions',data:[120000,135000,140000,156000], borderColor:'#3B82F6',fill:true,tension:0.4}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94A3B8'}}},scales:{x:{ticks:{color:'#64748B'},grid:{display:false}},y:{ticks:{color:'#64748B'},grid:{color:'#334155'}}}}} );
+    if(document.getElementById('autoPostChart')) new Chart(document.getElementById('autoPostChart'), { type:'bar', data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets:[{data:[2,2,2,2,2,1,1],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:6},{data:[45,52,38,61,55,32,28],backgroundColor:'rgba(16,185,129,0.7)',borderRadius:6}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94A3B8'}}},scales:{x:{ticks:{color:'#64748B'},grid:{display:false}},y:{ticks:{color:'#64748B'},grid:{color:'#334155'}}}}} );
+  }
 }
 
-function createChart(canvasId, type, data, color) {
-    const ctx = document.getElementById(canvasId);
-    if(!ctx) return;
-    new Chart(ctx, {
-        type: type,
-        data: {
-            labels: ['Week 1','Week 2','Week 3','Week 4'],
-            datasets: [{
-                label: 'Activity',
-                data: data,
-                backgroundColor: Array.isArray(color) ? color : (color + '80'),
-                borderColor: color,
-                borderWidth: 2,
-                fill: type === 'line' ? true : false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: type === 'doughnut' ? {} : {
-                x: { display:false, grid:{display:false} },
-                y: { display:false, grid:{display:true, color:'#334155'} }
-            }
-        }
-    });
+function renderScheduledPosts(posts) {
+  const list = document.getElementById('postsList');
+  if(!list) return;
+  list.innerHTML = '';
+  if(posts.length===0) { list.innerHTML='<div style="padding:20px;text-align:center;color:#64748B;">No posts yet.</div>'; return; }
+  posts.forEach(p=>{
+    const date = p.scheduled_time ? new Date(p.scheduled_time).toLocaleString() : (p.published_at ? new Date(p.published_at).toLocaleString() : 'Just now');
+    const cls = p.status==='published'?'published':(p.status==='scheduled'?'scheduled':'draft');
+    list.innerHTML += `<div class="scheduled-post" data-status="${p.status}"><div class="post-status ${cls}"></div><div class="post-info"><h4>${p.content.substring(0,50)}${p.content.length>50?'...':''}</h4><p>Status: <strong>${p.status.toUpperCase()}</strong></p><div class="post-meta"><span>📅 ${date}</span>${p.fb_post_id?`<span>✅ FB ID: ${p.fb_post_id}</span>`:''}${p.error_message?`<span style="color:#EF4444">❌ ${p.error_message}</span>`:''}</div></div><div class="post-actions"><button class="btn btn-outline btn-sm" onclick="deletePostById(${p.id})">Delete</button></div></div>`;
+  });
 }
 
-// Run on load
-window.onload = init;
+async function deletePostById(id) {
+  if(!confirm('Delete this post?')) return;
+  try { await fetch(API_URL+'/api/posts/'+id, {method:'DELETE'}); showToast('Deleted','success'); fetchData(); }
+  catch(e) { showToast('Failed to delete','error'); }
+}
+
+function filterPosts(status, btn) {
+  document.querySelectorAll('#page-scheduled .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.scheduled-post').forEach(post=>{ post.style.display=(status==='all'||post.dataset.status===status)?'flex':'none'; });
+}
+function toggleCheck(cb) { cb.closest('.checklist-item')?.classList.toggle('completed', cb.checked); }
+function showToast(msg, type="success") {
+  const t=document.getElementById('toast');
+  document.getElementById('toastIcon').innerText = type==='success'?'✅':type==='error'?'❌':'ℹ️';
+  document.getElementById('toastMessage').innerText = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// RUN ON LOAD
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
