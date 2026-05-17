@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prof Solar Facebook Marketing Dashboard</title>
+<title>ProfSolar Facebook Marketing Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.0/index.min.js"></script>
 <style>
@@ -76,7 +76,7 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; back
 .tool-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(245, 158, 11, 0.1); }
 .schedule-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
 .schedule-row label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
-.schedule-input { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+.schedule-input { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none; }
 .schedule-input:focus { border-color: var(--primary); }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 .calendar-day-header { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; padding: 8px 0; text-transform: uppercase; }
@@ -254,27 +254,27 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 <div class="stat-card">
 <div class="stat-header"><span class="stat-label">Post Reach</span><div class="stat-icon" style="background:rgba(59,130,246,0.15);">👁️</div></div>
-<div class="stat-value">48,293</div>
+<div class="stat-value" id="stat-reach">48,293</div>
 <div class="stat-change positive">↑ +18.5% vs last week</div>
 </div>
 <div class="stat-card">
 <div class="stat-header"><span class="stat-label">Engagement Rate</span><div class="stat-icon" style="background:rgba(16,185,129,0.15);">💬</div></div>
-<div class="stat-value">4.8%</div>
+<div class="stat-value" id="stat-engagement-rate">4.8%</div>
 <div class="stat-change positive">↑ +1.2% improvement</div>
 </div>
 <div class="stat-card">
 <div class="stat-header"><span class="stat-label">Posts This Month</span><div class="stat-icon" style="background:rgba(139,92,246,0.15);">📝</div></div>
-<div class="stat-value">23</div>
+<div class="stat-value" id="stat-posts-month">23</div>
 <div class="stat-change positive">↑ On track for 30+</div>
 </div>
 <div class="stat-card">
 <div class="stat-header"><span class="stat-label">Website Clicks</span><div class="stat-icon" style="background:rgba(239,68,68,0.15);">🔗</div></div>
-<div class="stat-value">1,247</div>
+<div class="stat-value" id="stat-clicks">1,247</div>
 <div class="stat-change positive">↑ +23% to profsolar.co.za</div>
 </div>
 <div class="stat-card">
 <div class="stat-header"><span class="stat-label">Leads Generated</span><div class="stat-icon" style="background:rgba(245,158,11,0.15);">🎯</div></div>
-<div class="stat-value">89</div>
+<div class="stat-value" id="stat-leads">89</div>
 <div class="stat-change positive">↑ +15 new this week</div>
 </div>
 </div>
@@ -447,7 +447,7 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 <div class="scheduled-post"><div class="post-status published"></div><div class="post-info"><h4>⭐ Customer Review Compilation</h4><div class="post-meta"><span>👁️ 5,678 reach</span><span>❤️ 423 likes</span><span>💬 89 comments</span></div></div></div>
 </div>
 </div>
-<div class="card"><div class="card-header"><div class="card-title">👥 Audience Demographics</div></div><div class="grid-3"><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Age Distribution</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">25-34</span><div class="progress-bar"><div class="progress-fill" style="width:38%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">38%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">35-44</span><div class="progress-bar"><div class="progress-fill" style="width:32%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">32%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">45-54</span><div class="progress-bar"><div class="progress-fill" style="width:18%;background:var(--accent);"></div></div><span style="font-size:11px;color:var(--text-muted);">18%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">18-24</span><div class="progress-bar"><div class="progress-fill" style="width:8%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">8%</span></div><div><span style="font-size:12px;">55+</span><div class="progress-bar"><div class="progress-fill" style="width:4%;background:var(--danger);"></div></div><span style="font-size:11px;color:var(--text-muted);">4%</span></div></div><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Top Locations</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">Gauteng</span><div class="progress-bar"><div class="progress-fill" style="width:42%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">42%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Western Cape</span><div class="progress-bar"><div class="progress-fill" style="width:24%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">24%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">KwaZulu-Natal</span><div class="progress-bar"><div class="progress-fill" style="width:18%;background:var(--accent);"></div></div><span style="font-size:11px;color:var(--text-muted);">18%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Eastern Cape</span><div class="progress-bar"><div class="progress-fill" style="width:9%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">9%</span></div><div><span style="font-size:12px;">Other</span><div class="progress-bar"><div class="progress-fill" style="width:7%;background:var(--danger);"></div></div><span style="font-size:11px;color:var(--text-muted);">7%</span></div></div><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Gender</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">Male</span><div class="progress-bar"><div class="progress-fill" style="width:62%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">62%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Female</span><div class="progress-bar"><div class="progress-fill" style="width:36%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">36%</span></div><div><span style="font-size:12px;">Other</span><div class="progress-bar"><div class="progress-fill" style="width:2%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">2%</span></div><h4 style="font-size:13px;margin:16px 0 12px;color:var(--text-muted);">Peak Active Hours</h4><div style="font-size:12px;color:var(--text-secondary);">🌅 Morning: 7-9 AM (High)</div><div style="font-size:12px;color:var(--text-secondary);">🌞 Midday: 12-2 PM (Medium)</div><div style="font-size:12px;color:var(--text-secondary);">🌆 Evening: 6-9 PM (Highest)</div></div></div></div>
+<div class="card"><div class="card-header"><div class="card-title">👥 Audience Demographics</div></div><div class="grid-3"><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Age Distribution</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">25-34</span><div class="progress-bar"><div class="progress-fill" style="width:38%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">38%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">35-44</span><div class="progress-bar"><div class="progress-fill" style="width:32%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">32%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">45-54</span><div class="progress-bar"><div class="progress-fill" style="width:18%;background:var(--accent);"></div></div><span style="font-size:11px;color:var(--text-muted);">18%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">18-24</span><div class="progress-bar"><div class="progress-fill" style="width:8%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">8%</span></div><div><span style="font-size:12px;">55+</span><div class="progress-bar"><div class="progress-fill" style="width:4%;background:var(--danger);"></div></div><span style="font-size:11px;color:var(--text-muted);">4%</span></div></div><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Top Locations</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">Gauteng</span><div class="progress-bar"><div class="progress-fill" style="width:42%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">42%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Western Cape</span><div class="progress-bar"><div class="progress-fill" style="width:24%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">24%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">KwaZulu-Natal</span><div class="progress-bar"><div class="progress-fill" style="width:18%;background:var(--accent);"></div></div><span style="font-size:11px;color:var(--text-muted);">18%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Eastern Cape</span><div class="progress-bar"><div class="progress-fill" style="width:9%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">9%</span></div><div><span style="font-size:12px;">Other</span><div class="progress-bar"><div class="progress-fill" style="width:7%;background:var(--danger);"></div></div><span style="font-size:11px;color:var(--text-muted);">7%</span></div></div><div><h4 style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Gender</h4><div style="margin-bottom:8px;"><span style="font-size:12px;">Male</span><div class="progress-bar"><div class="progress-fill" style="width:62%;background:var(--info);"></div></div><span style="font-size:11px;color:var(--text-muted);">62%</span></div><div style="margin-bottom:8px;"><span style="font-size:12px;">Female</span><div class="progress-bar"><div class="progress-fill" style="width:36%;background:var(--primary);"></div></div><span style="font-size:11px;color:var(--text-muted);">36%</span></div><div><span style="font-size:12px;">Other</span><div class="progress-bar"><div class="progress-fill" style="width:2%;background:var(--purple);"></div></div><span style="font-size:11px;color:var(--text-muted);">2%</span></div><h4 style="font-size:13px;margin:16px 0 12px;color:var(--text-muted);">Peak Active Hours</h4><div style="font-size:12px;color:var(--text-secondary);">🌅 Morning: 7-9 AM (High)</div><div style="font-size:12px;color:var(--text-secondary);">🌞 Midday: 12-2 PM (Medium)</div><div style="font-size:12px;color:var(--text-secondary);">🌆 Evening: 6-9 PM (Highest)</div></div></div>
 </div>
 
 <!-- Viral Trends Page -->
@@ -528,17 +528,21 @@ let currentPage = 'dashboard';
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 let charts = {};
+let API_URL = 'https://profsolar-backend.onrender.com';
 
 // ==================== NAVIGATION ====================
 function switchPage(page) {
     currentPage = page;
     document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
     const pageEl = document.getElementById('page-' + page);
     if (pageEl) pageEl.classList.add('active');
+    
     const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
     if (navEl) navEl.classList.add('active');
-    const titles = { 
+    
+    const titles = {
         dashboard: ['Dashboard', 'Prof Solar Facebook Marketing Overview'],
         composer: ['Post Composer', 'Create & schedule Facebook posts'],
         calendar: ['Content Calendar', 'Plan your monthly content strategy'],
@@ -551,17 +555,21 @@ function switchPage(page) {
         content: ['Content Ideas', 'AI-generated post ideas for Prof Solar'],
         settings: ['Settings', 'Facebook connection & preferences']
     };
+    
     if (titles[page]) {
         document.getElementById('pageTitle').textContent = titles[page][0];
         document.getElementById('pageSubtitle').textContent = titles[page][1];
     }
+    
     if (page === 'calendar') renderCalendar();
     if (page === 'optimal') renderHeatmap();
     if (page === 'analytics') initAnalyticsCharts();
     if (page === 'autopost') initAutoPostChart();
     if (page === 'scheduled') loadPosts();
+    
     document.getElementById('sidebar').classList.remove('open');
 }
+
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
 }
@@ -573,68 +581,129 @@ if (postContentEl) {
         document.getElementById('previewContent').textContent = this.value || 'Your post content will appear here as you type...';
     });
 }
+
 function toggleHashtag(el) {
     el.classList.toggle('selected');
 }
+
 function handleFileUpload(event) {
     const files = event.target.files;
     const preview = document.getElementById('filePreview');
     preview.innerHTML = '';
+    
     for (let i = 0; i < files.length; i++) {
         const div = document.createElement('div');
         div.style.cssText = 'background:var(--bg-input);border-radius:8px;padding:8px 12px;font-size:12px;display:flex;align-items:center;gap:6px;';
         div.innerHTML = `📎 ${files[i].name} <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;">✕</button>`;
         preview.appendChild(div);
     }
-    if (files.length > 0) document.getElementById('previewImage').innerHTML = '📸 ' + files.length + ' file(s) attached';
+    
+    if (files.length > 0) {
+        document.getElementById('previewImage').innerHTML = '📸 ' + files.length + ' file(s) attached';
+    }
 }
+
 function addLinkToPost() {
     const t = document.getElementById('postContent');
     t.value += '\n🔗 https://www.profsolar.co.za';
     t.dispatchEvent(new Event('input'));
 }
+
 function addPollToPost() {
     const t = document.getElementById('postContent');
-    t.value += '\n📊 POLL: What\'s your biggest concern about going solar?\nA) Cost B) Maintenance C) Reliability D) Aesthetics\nVote below! 👇';
+    t.value += '\n📊 POLL: What\'s your biggest concern about going solar?\nA) Cost\nB) Maintenance\nC) Reliability\nD) Aesthetics\nVote below! 👇';
     t.dispatchEvent(new Event('input'));
 }
+
 function addEmoji() {
     const e = ['☀️', '⚡', '💰', '🏠', '🔋', '🌍', '💚', '🎯', '📈', '🔥', '👍', '💪', '🇿🇦', '✨', '🌟'];
     const t = document.getElementById('postContent');
     t.value += e[Math.floor(Math.random() * e.length)];
     t.dispatchEvent(new Event('input'));
 }
+
 function aiSuggestContent() {
     const suggestions = [
         "☀️ LOAD SHEDDING UPDATE: Don't get caught in the dark again!\nA Prof Solar 5kW system with battery backup keeps your lights on, fridge running, and WiFi connected through ANY stage of load shedding.\n💰 Starting from just R89,000\n📊 Save up to R2,500/month\n⚡ Installation in just 2 days\n👉 Get your FREE quote today: www.profsolar.co.za\n#LoadShedding #SolarEnergy #ProfSolar #SouthAfrica",
         "🤔 THINKING ABOUT SOLAR? Here's what most installers won't tell you:\n✅ Not all panels are equal - we use Tier 1 panels only\n✅ Battery backup is ESSENTIAL for load shedding\n✅ Your ROI is typically 3-5 years in SA\n✅ Government tax incentives available NOW\n✅ We handle ALL paperwork & approvals\nDon't just go solar - go Prof Solar! ☀️\n📞 Call us: 0800 PROF SOLAR\n🌐 www.profsolar.co.za\n#SolarTips #ProfSolar #GoSolar #RenewableEnergy",
         "📊 REAL RESULTS from a REAL Prof Solar customer:\n📍 Location: Sandton, Johannesburg\n🏠 System: 8kW + 10kWh Battery\n📅 Installed: March 2024\n\n💡 Before Solar:\n• Monthly bill: R4,200\n• Load shedding: 4-6 hours daily\n• Generator costs: R800/month\n\n☀️ After Solar:\n• Monthly bill: R350\n• Load shedding impact: ZERO\n• Generator: SOLD\n\n💰 Total savings in 10 months: R38,500!\nWant results like this? 👇\nwww.profsolar.co.za\n#SolarResults #ProfSolar #CustomerSuccess"
     ];
+    
     const suggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
     document.getElementById('postContent').value = suggestion;
     document.getElementById('postContent').dispatchEvent(new Event('input'));
     showToast('AI content suggestion loaded!', 'info');
 }
+
 function useSuggestion(el) {
     document.getElementById('postContent').value = el.querySelector('p').textContent;
     document.getElementById('postContent').dispatchEvent(new Event('input'));
     showToast('Content loaded into composer!', 'success');
 }
+
 function useTrendTemplate(el) {
     document.getElementById('postContent').value = el.querySelector('h4').textContent + '\n' + el.querySelector('p').textContent;
     document.getElementById('postContent').dispatchEvent(new Event('input'));
     switchPage('composer');
     showToast('Template loaded! Customize and publish.', 'success');
 }
+
 function useIdea(el) {
     document.getElementById('postContent').value = el.querySelector('h4').textContent + '\n' + el.querySelector('p').textContent;
     document.getElementById('postContent').dispatchEvent(new Event('input'));
     switchPage('composer');
     showToast('Idea loaded into composer!', 'success');
 }
+
 function refreshSuggestions() {
     showToast('AI suggestions refreshed!', 'info');
+    // Generate new content suggestions
+    const suggestions = [
+        "☀️ LOAD SHEDDING UPDATE: Don't get caught in the dark again!\nA Prof Solar 5kW system with battery backup keeps your lights on, fridge running, and WiFi connected through ANY stage of load shedding.\n💰 Starting from just R89,000\n📊 Save up to R2,500/month\n⚡ Installation in just 2 days\n👉 Get your FREE quote today: www.profsolar.co.za\n#LoadShedding #SolarEnergy #ProfSolar #SouthAfrica",
+        "🤔 THINKING ABOUT SOLAR? Here's what most installers won't tell you:\n✅ Not all panels are equal - we use Tier 1 panels only\n✅ Battery backup is ESSENTIAL for load shedding\n✅ Your ROI is typically 3-5 years in SA\n✅ Government tax incentives available NOW\n✅ We handle ALL paperwork & approvals\nDon't just go solar - go Prof Solar! ☀️\n📞 Call us: 0800 PROF SOLAR\n🌐 www.profsolar.co.za\n#SolarTips #ProfSolar #GoSolar #RenewableEnergy",
+        "📊 REAL RESULTS from a REAL Prof Solar customer:\n📍 Location: Sandton, Johannesburg\n🏠 System: 8kW + 10kWh Battery\n📅 Installed: March 2024\n\n💡 Before Solar:\n• Monthly bill: R4,200\n• Load shedding: 4-6 hours daily\n• Generator costs: R800/month\n\n☀️ After Solar:\n• Monthly bill: R350\n• Load shedding impact: ZERO\n• Generator: SOLD\n\n💰 Total savings in 10 months: R38,500!\nWant results like this? 👇\nwww.profsolar.co.za\n#SolarResults #ProfSolar #CustomerSuccess"
+    ];
+    
+    // Update the displayed suggestions
+    const aiSuggestions = document.getElementById('aiSuggestions');
+    aiSuggestions.innerHTML = '';
+    
+    suggestions.forEach(suggestion => {
+        const suggestionElement = document.createElement('div');
+        suggestionElement.className = 'suggestion-card';
+        suggestionElement.innerHTML = `
+            <h4>💡 Educational Post</h4>
+            <p>${suggestion}</p>
+            <span class="suggestion-type type-educational">Educational</span>
+        `;
+        aiSuggestions.appendChild(suggestionElement);
+    });
 }
+
+function refreshTrends() {
+    showToast('🔄 Refreshing trending topics...', 'info');
+    setTimeout(() => {
+        showToast('🔥 Trends updated!', 'success');
+        // Refresh the trends data
+        const trends = [
+            "Eskom Stage 6 Load Shedding Returns",
+            "Solar Tax Incentive Extended for 2025",
+            "Battery Storage Prices Drop 40%",
+            "DIY Solar Panel Installation Dangers",
+            "Solar-Powered EV Charging Stations",
+            "Community Solar Projects in Townships",
+            "Net Metering Policy Changes"
+        ];
+        
+        const trendItems = document.querySelectorAll('.trend-item');
+        trendItems.forEach((item, index) => {
+            const trendInfo = item.querySelector('.trend-info');
+            trendInfo.querySelector('h4').textContent = trends[index];
+            trendInfo.querySelector('span').textContent = `${Math.floor(1000 + Math.random() * 1000)}K engagements · ${['Trending in SA', 'Government policy', 'Industry news', 'Safety awareness', 'Future tech', 'Social impact', 'Regulatory'][index]}`;
+        });
+    }, 1000);
+}
+
 function openComposer() {
     switchPage('composer');
 }
@@ -653,12 +722,13 @@ async function publishPost() {
     const formData = new FormData();
     formData.append('content', content);
     formData.append('postType', postType);
+    
     for (let i = 0; i < fileInput.files.length; i++) {
         formData.append('media', fileInput.files[i]);
     }
 
     try {
-        const response = await fetch('http://localhost:3000/api/posts', { 
+        const response = await fetch(`${API_URL}/api/posts`, { 
             method: 'POST', 
             body: formData 
         });
@@ -707,7 +777,7 @@ async function confirmSchedule() {
     formData.append('postType', postType);
 
     try {
-        const response = await fetch('http://localhost:3000/api/posts', { 
+        const response = await fetch(`${API_URL}/api/posts`, { 
             method: 'POST', 
             body: formData 
         });
@@ -738,7 +808,7 @@ function saveDraft() {
 
 async function loadPosts() {
     try {
-        const response = await fetch('http://localhost:3000/api/posts');
+        const response = await fetch(`${API_URL}/api/posts`);
         const data = await response.json();
         if (data.success) {
             renderPostsList(data.posts);
@@ -748,6 +818,7 @@ async function loadPosts() {
         }
     } catch (error) {
         console.error('Failed to load posts:', error);
+        showToast('⚠️ Error loading posts. Check connection.', 'error');
     }
 }
 
@@ -789,7 +860,7 @@ function renderPostsList(posts) {
 async function deletePostById(id) {
     if (!confirm('Delete this post?')) return;
     try {
-        await fetch(`http://localhost:3000/api/posts/${id}`, { method: 'DELETE' });
+        await fetch(`${API_URL}/api/posts/${id}`, { method: 'DELETE' });
         showToast('🗑️ Post deleted', 'success');
         loadPosts();
     } catch (error) {
@@ -928,15 +999,49 @@ function filterIdeas(type, btn) {
 function generateMoreIdeas() {
     showToast('🔄 Generating fresh content ideas...', 'info');
     setTimeout(() => {
+        // Generate new ideas
+        const ideas = [
+            {
+                title: "📚 'How Solar Panels Work in Simple Terms'",
+                description: "Create an easy-to-understand infographic explaining the solar energy process from panel to plug. Perfect for audiences new to solar. Include simple diagrams and SA-specific data.",
+                type: "educational"
+            },
+            {
+                title: "🎯 'Free Solar Assessment - Limited Spots'",
+                description: "Create urgency with a limited-time free solar assessment offer. Include a clear CTA linking to profsolar.co.za. Use countdown language and social proof (\"500+ assessments completed\").",
+                type: "promotional"
+            },
+            {
+                title: "💬 'What's Your Load Shedding Horror Story?'",
+                description: "Ask followers to share their worst load shedding experiences. This drives massive comments and engagement. Follow up with how solar could have prevented each situation.",
+                type: "engagement"
+            },
+            {
+                title: "⭐ '6 Months Solar - Here's What Happened'",
+                description: "Share a customer's 6-month journey with before/after electricity bills, lifestyle changes, and ROI calculations. Real data builds trust and drives conversions.",
+                type: "testimonial"
+            }
+        ];
+        
+        // Update the displayed ideas
+        const ideasList = document.getElementById('ideasList');
+        ideasList.innerHTML = '';
+        
+        ideas.forEach(idea => {
+            const ideaElement = document.createElement('div');
+            ideaElement.className = 'suggestion-card';
+            ideaElement.dataset.type = idea.type;
+            ideaElement.innerHTML = `
+                <h4>${idea.title}</h4>
+                <p>${idea.description}</p>
+                <span class="suggestion-type type-${idea.type}">${idea.type.charAt(0).toUpperCase() + idea.type.slice(1)}</span>
+            `;
+            ideaElement.onclick = function() { useIdea(this); };
+            ideasList.appendChild(ideaElement);
+        });
+        
         showToast('✨ 8 new content ideas generated!', 'success');
     }, 1500);
-}
-
-function refreshTrends() {
-    showToast('🔄 Refreshing trending topics...', 'info');
-    setTimeout(() => {
-        showToast('🔥 Trends updated!', 'success');
-    }, 1000);
 }
 
 function closeModal(id) {
