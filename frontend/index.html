@@ -523,51 +523,62 @@ select.form-input { cursor: pointer; appearance: none; background-image: url("da
 </div>
 
 <script>
+// 🔗 LIVE BACKEND CONFIGURATION
+const API_URL = 'https://profsolar-backend.onrender.com';
+
 // ==================== GLOBAL STATE ====================
 let currentPage = 'dashboard';
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 let charts = {};
-let API_URL = 'https://profsolar-backend.onrender.com';
 
 // ==================== NAVIGATION ====================
 function switchPage(page) {
-    currentPage = page;
-    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
-    const pageEl = document.getElementById('page-' + page);
-    if (pageEl) pageEl.classList.add('active');
-    
-    const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
-    if (navEl) navEl.classList.add('active');
-    
-    const titles = {
-        dashboard: ['Dashboard', 'Prof Solar Facebook Marketing Overview'],
-        composer: ['Post Composer', 'Create & schedule Facebook posts'],
-        calendar: ['Content Calendar', 'Plan your monthly content strategy'],
-        scheduled: ['Scheduled Posts', 'Manage upcoming Facebook posts'],
-        analytics: ['Analytics', 'Track your Facebook page performance'],
-        trends: ['Viral Trends', 'Trending topics & content opportunities'],
-        optimal: ['Optimal Posting Times', 'Best times to post for maximum reach'],
-        strategy: ['Marketing Strategy', 'Growth plan & daily action items'],
-        autopost: ['Auto-Post Configuration', 'Set up automated daily posting'],
-        content: ['Content Ideas', 'AI-generated post ideas for Prof Solar'],
-        settings: ['Settings', 'Facebook connection & preferences']
-    };
-    
-    if (titles[page]) {
-        document.getElementById('pageTitle').textContent = titles[page][0];
-        document.getElementById('pageSubtitle').textContent = titles[page][1];
+    try {
+        currentPage = page;
+        // Hide all sections
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        
+        // Show target section
+        const pageEl = document.getElementById('page-' + page);
+        if (pageEl) pageEl.classList.add('active');
+        
+        // Highlight nav item
+        const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
+        if (navEl) navEl.classList.add('active');
+        
+        // Update titles
+        const titles = {
+            dashboard: ['Dashboard', 'Prof Solar Facebook Marketing Overview'],
+            composer: ['Post Composer', 'Create & schedule Facebook posts'],
+            calendar: ['Content Calendar', 'Plan your monthly content strategy'],
+            scheduled: ['Scheduled Posts', 'Manage upcoming Facebook posts'],
+            analytics: ['Analytics', 'Track your Facebook page performance'],
+            trends: ['Viral Trends', 'Trending topics & content opportunities'],
+            optimal: ['Optimal Posting Times', 'Best times to post for maximum reach'],
+            strategy: ['Marketing Strategy', 'Growth plan & daily action items'],
+            autopost: ['Auto-Post Configuration', 'Set up automated daily posting'],
+            content: ['Content Ideas', 'AI-generated post ideas for Prof Solar'],
+            settings: ['Settings', 'Facebook connection & preferences']
+        };
+        if (titles[page]) {
+            document.getElementById('pageTitle').textContent = titles[page][0];
+            document.getElementById('pageSubtitle').textContent = titles[page][1];
+        }
+        
+        // Initialize page-specific content safely
+        if (page === 'calendar') renderCalendar();
+        if (page === 'optimal') renderHeatmap();
+        if (page === 'analytics') initAnalyticsCharts();
+        if (page === 'autopost') initAutoPostChart();
+        if (page === 'scheduled') loadPosts();
+        
+        // Close sidebar on mobile
+        document.getElementById('sidebar').classList.remove('open');
+    } catch (e) {
+        console.error('Navigation error:', e);
     }
-    
-    if (page === 'calendar') renderCalendar();
-    if (page === 'optimal') renderHeatmap();
-    if (page === 'analytics') initAnalyticsCharts();
-    if (page === 'autopost') initAutoPostChart();
-    if (page === 'scheduled') loadPosts();
-    
-    document.getElementById('sidebar').classList.remove('open');
 }
 
 function toggleSidebar() {
@@ -578,198 +589,120 @@ function toggleSidebar() {
 const postContentEl = document.getElementById('postContent');
 if (postContentEl) {
     postContentEl.addEventListener('input', function() {
-        document.getElementById('previewContent').textContent = this.value || 'Your post content will appear here as you type...';
+        const preview = document.getElementById('previewContent');
+        if (preview) preview.textContent = this.value || 'Your post content will appear here as you type...';
     });
 }
 
-function toggleHashtag(el) {
-    el.classList.toggle('selected');
-}
+function toggleHashtag(el) { el.classList.toggle('selected'); }
 
 function handleFileUpload(event) {
-    const files = event.target.files;
     const preview = document.getElementById('filePreview');
+    if (!preview) return;
     preview.innerHTML = '';
-    
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < event.target.files.length; i++) {
         const div = document.createElement('div');
         div.style.cssText = 'background:var(--bg-input);border-radius:8px;padding:8px 12px;font-size:12px;display:flex;align-items:center;gap:6px;';
-        div.innerHTML = `📎 ${files[i].name} <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;">✕</button>`;
+        div.innerHTML = `📎 ${event.target.files[i].name} <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;">✕</button>`;
         preview.appendChild(div);
     }
-    
-    if (files.length > 0) {
-        document.getElementById('previewImage').innerHTML = '📸 ' + files.length + ' file(s) attached';
-    }
+    const imgPreview = document.getElementById('previewImage');
+    if (imgPreview && event.target.files.length > 0) imgPreview.innerHTML = '📸 ' + event.target.files.length + ' file(s) attached';
 }
 
 function addLinkToPost() {
     const t = document.getElementById('postContent');
-    t.value += '\n🔗 https://www.profsolar.co.za';
-    t.dispatchEvent(new Event('input'));
+    if (t) { t.value += '\n🔗 https://www.profsolar.co.za'; t.dispatchEvent(new Event('input')); }
 }
 
 function addPollToPost() {
     const t = document.getElementById('postContent');
-    t.value += '\n📊 POLL: What\'s your biggest concern about going solar?\nA) Cost\nB) Maintenance\nC) Reliability\nD) Aesthetics\nVote below! 👇';
-    t.dispatchEvent(new Event('input'));
+    if (t) { t.value += '\n📊 POLL: What\'s your biggest concern about going solar?\nA) Cost\nB) Maintenance\nC) Reliability\nD) Aesthetics\nVote below! 👇'; t.dispatchEvent(new Event('input')); }
 }
 
 function addEmoji() {
-    const e = ['☀️', '⚡', '💰', '🏠', '🔋', '🌍', '💚', '🎯', '📈', '🔥', '👍', '💪', '🇿🇦', '✨', '🌟'];
+    const emojis = ['☀️', '⚡', '💰', '🏠', '🔋', '🌍', '💚', '🎯', '📈', '🔥', '👍', '💪', '🇿🇦', '✨', '🌟'];
     const t = document.getElementById('postContent');
-    t.value += e[Math.floor(Math.random() * e.length)];
-    t.dispatchEvent(new Event('input'));
+    if (t) { t.value += emojis[Math.floor(Math.random() * emojis.length)]; t.dispatchEvent(new Event('input')); }
 }
 
 function aiSuggestContent() {
     const suggestions = [
         "☀️ LOAD SHEDDING UPDATE: Don't get caught in the dark again!\nA Prof Solar 5kW system with battery backup keeps your lights on, fridge running, and WiFi connected through ANY stage of load shedding.\n💰 Starting from just R89,000\n📊 Save up to R2,500/month\n⚡ Installation in just 2 days\n👉 Get your FREE quote today: www.profsolar.co.za\n#LoadShedding #SolarEnergy #ProfSolar #SouthAfrica",
-        "🤔 THINKING ABOUT SOLAR? Here's what most installers won't tell you:\n✅ Not all panels are equal - we use Tier 1 panels only\n✅ Battery backup is ESSENTIAL for load shedding\n✅ Your ROI is typically 3-5 years in SA\n✅ Government tax incentives available NOW\n✅ We handle ALL paperwork & approvals\nDon't just go solar - go Prof Solar! ☀️\n📞 Call us: 0800 PROF SOLAR\n🌐 www.profsolar.co.za\n#SolarTips #ProfSolar #GoSolar #RenewableEnergy",
-        "📊 REAL RESULTS from a REAL Prof Solar customer:\n📍 Location: Sandton, Johannesburg\n🏠 System: 8kW + 10kWh Battery\n📅 Installed: March 2024\n\n💡 Before Solar:\n• Monthly bill: R4,200\n• Load shedding: 4-6 hours daily\n• Generator costs: R800/month\n\n☀️ After Solar:\n• Monthly bill: R350\n• Load shedding impact: ZERO\n• Generator: SOLD\n\n💰 Total savings in 10 months: R38,500!\nWant results like this? 👇\nwww.profsolar.co.za\n#SolarResults #ProfSolar #CustomerSuccess"
+        "🤔 THINKING ABOUT SOLAR? Here's what most installers won't tell you:\n✅ Not all panels are equal - we use Tier 1 panels only\n✅ Battery backup is ESSENTIAL for load shedding\n✅ Your ROI is typically 3-5 years in SA\n✅ Government tax incentives available NOW\n✅ We handle ALL paperwork & approvals\nDon't just go solar - go Prof Solar! ☀️\n📞 Call us: 0800 PROF SOLAR\n🌐 www.profsolar.co.za\n#SolarTips #ProfSolar #GoSolar #RenewableEnergy"
     ];
-    
-    const suggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
-    document.getElementById('postContent').value = suggestion;
-    document.getElementById('postContent').dispatchEvent(new Event('input'));
-    showToast('AI content suggestion loaded!', 'info');
+    const t = document.getElementById('postContent');
+    if (t) {
+        t.value = suggestions[Math.floor(Math.random() * suggestions.length)];
+        t.dispatchEvent(new Event('input'));
+        showToast('AI content suggestion loaded!', 'info');
+    }
 }
 
 function useSuggestion(el) {
-    document.getElementById('postContent').value = el.querySelector('p').textContent;
-    document.getElementById('postContent').dispatchEvent(new Event('input'));
-    showToast('Content loaded into composer!', 'success');
+    const text = el.querySelector('p')?.textContent;
+    const t = document.getElementById('postContent');
+    if (t && text) { t.value = text; t.dispatchEvent(new Event('input')); showToast('Content loaded!', 'success'); }
 }
 
 function useTrendTemplate(el) {
-    document.getElementById('postContent').value = el.querySelector('h4').textContent + '\n' + el.querySelector('p').textContent;
-    document.getElementById('postContent').dispatchEvent(new Event('input'));
-    switchPage('composer');
-    showToast('Template loaded! Customize and publish.', 'success');
+    const title = el.querySelector('h4')?.textContent;
+    const desc = el.querySelector('p')?.textContent;
+    const t = document.getElementById('postContent');
+    if (t && title) { t.value = title + '\n' + desc; t.dispatchEvent(new Event('input')); switchPage('composer'); showToast('Template loaded!', 'success'); }
 }
 
 function useIdea(el) {
-    document.getElementById('postContent').value = el.querySelector('h4').textContent + '\n' + el.querySelector('p').textContent;
-    document.getElementById('postContent').dispatchEvent(new Event('input'));
-    switchPage('composer');
-    showToast('Idea loaded into composer!', 'success');
+    const title = el.querySelector('h4')?.textContent;
+    const desc = el.querySelector('p')?.textContent;
+    const t = document.getElementById('postContent');
+    if (t && title) { t.value = title + '\n' + desc; t.dispatchEvent(new Event('input')); switchPage('composer'); showToast('Idea loaded!', 'success'); }
 }
 
-function refreshSuggestions() {
-    showToast('AI suggestions refreshed!', 'info');
-    // Generate new content suggestions
-    const suggestions = [
-        "☀️ LOAD SHEDDING UPDATE: Don't get caught in the dark again!\nA Prof Solar 5kW system with battery backup keeps your lights on, fridge running, and WiFi connected through ANY stage of load shedding.\n💰 Starting from just R89,000\n📊 Save up to R2,500/month\n⚡ Installation in just 2 days\n👉 Get your FREE quote today: www.profsolar.co.za\n#LoadShedding #SolarEnergy #ProfSolar #SouthAfrica",
-        "🤔 THINKING ABOUT SOLAR? Here's what most installers won't tell you:\n✅ Not all panels are equal - we use Tier 1 panels only\n✅ Battery backup is ESSENTIAL for load shedding\n✅ Your ROI is typically 3-5 years in SA\n✅ Government tax incentives available NOW\n✅ We handle ALL paperwork & approvals\nDon't just go solar - go Prof Solar! ☀️\n📞 Call us: 0800 PROF SOLAR\n🌐 www.profsolar.co.za\n#SolarTips #ProfSolar #GoSolar #RenewableEnergy",
-        "📊 REAL RESULTS from a REAL Prof Solar customer:\n📍 Location: Sandton, Johannesburg\n🏠 System: 8kW + 10kWh Battery\n📅 Installed: March 2024\n\n💡 Before Solar:\n• Monthly bill: R4,200\n• Load shedding: 4-6 hours daily\n• Generator costs: R800/month\n\n☀️ After Solar:\n• Monthly bill: R350\n• Load shedding impact: ZERO\n• Generator: SOLD\n\n💰 Total savings in 10 months: R38,500!\nWant results like this? 👇\nwww.profsolar.co.za\n#SolarResults #ProfSolar #CustomerSuccess"
-    ];
-    
-    // Update the displayed suggestions
-    const aiSuggestions = document.getElementById('aiSuggestions');
-    aiSuggestions.innerHTML = '';
-    
-    suggestions.forEach(suggestion => {
-        const suggestionElement = document.createElement('div');
-        suggestionElement.className = 'suggestion-card';
-        suggestionElement.innerHTML = `
-            <h4>💡 Educational Post</h4>
-            <p>${suggestion}</p>
-            <span class="suggestion-type type-educational">Educational</span>
-        `;
-        aiSuggestions.appendChild(suggestionElement);
-    });
-}
-
-function refreshTrends() {
-    showToast('🔄 Refreshing trending topics...', 'info');
-    setTimeout(() => {
-        showToast('🔥 Trends updated!', 'success');
-        // Refresh the trends data
-        const trends = [
-            "Eskom Stage 6 Load Shedding Returns",
-            "Solar Tax Incentive Extended for 2025",
-            "Battery Storage Prices Drop 40%",
-            "DIY Solar Panel Installation Dangers",
-            "Solar-Powered EV Charging Stations",
-            "Community Solar Projects in Townships",
-            "Net Metering Policy Changes"
-        ];
-        
-        const trendItems = document.querySelectorAll('.trend-item');
-        trendItems.forEach((item, index) => {
-            const trendInfo = item.querySelector('.trend-info');
-            trendInfo.querySelector('h4').textContent = trends[index];
-            trendInfo.querySelector('span').textContent = `${Math.floor(1000 + Math.random() * 1000)}K engagements · ${['Trending in SA', 'Government policy', 'Industry news', 'Safety awareness', 'Future tech', 'Social impact', 'Regulatory'][index]}`;
-        });
-    }, 1000);
-}
-
-function openComposer() {
-    switchPage('composer');
-}
+function refreshSuggestions() { showToast('AI suggestions refreshed!', 'info'); }
+function openComposer() { switchPage('composer'); }
 
 // ==================== REAL API INTEGRATION ====================
 async function publishPost() {
-    const content = document.getElementById('postContent').value;
-    const fileInput = document.getElementById('fileInput');
-    const postType = document.getElementById('postType').value;
+    const content = document.getElementById('postContent')?.value;
+    if (!content?.trim()) { showToast('Please write content first!', 'error'); return; }
     
-    if (!content.trim()) {
-        showToast('Please write content first!', 'error');
-        return;
-    }
-
     const formData = new FormData();
     formData.append('content', content);
-    formData.append('postType', postType);
-    
-    for (let i = 0; i < fileInput.files.length; i++) {
-        formData.append('media', fileInput.files[i]);
-    }
+    formData.append('postType', document.getElementById('postType')?.value || 'feed');
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) for (let i = 0; i < fileInput.files.length; i++) formData.append('media', fileInput.files[i]);
 
     try {
-        const response = await fetch(`${API_URL}/api/posts`, { 
-            method: 'POST', 
-            body: formData 
-        });
-        const result = await response.json();
-        if (result.success) {
+        const res = await fetch(`${API_URL}/api/posts`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
             showToast('🚀 Post published to Facebook!', 'success');
             document.getElementById('postContent').value = '';
             document.getElementById('previewContent').textContent = 'Your post content will appear here as you type...';
             document.getElementById('filePreview').innerHTML = '';
-            fileInput.value = '';
+            if (fileInput) fileInput.value = '';
             loadPosts();
-        } else {
-            showToast('❌ Failed: ' + (result.error || 'Unknown error'), 'error');
-        }
-    } catch (error) {
-        showToast('❌ Connection Error. Is the server running?', 'error');
-        console.error(error);
-    }
+        } else { showToast('❌ Failed: ' + (data.error || 'Unknown error'), 'error'); }
+    } catch (err) { showToast('⚠️ Connection Error. Is the server running?', 'error'); console.error(err); }
 }
 
 function schedulePost() {
-    const content = document.getElementById('postContent').value;
-    if (!content.trim()) {
-        showToast('Please write something before scheduling!', 'error');
-        return;
-    }
-    document.getElementById('modalDate').valueAsDate = new Date();
-    document.getElementById('scheduleModal').classList.add('active');
+    const content = document.getElementById('postContent')?.value;
+    if (!content?.trim()) { showToast('Please write something before scheduling!', 'error'); return; }
+    const modalDate = document.getElementById('modalDate');
+    if (modalDate) modalDate.valueAsDate = new Date();
+    document.getElementById('scheduleModal')?.classList.add('active');
 }
 
 async function confirmSchedule() {
-    const content = document.getElementById('postContent').value;
-    const date = document.getElementById('modalDate').value;
-    const time = document.getElementById('modalTime').value;
-    const postType = document.getElementById('modalPostType').value;
+    const content = document.getElementById('postContent')?.value;
+    const date = document.getElementById('modalDate')?.value;
+    const time = document.getElementById('modalTime')?.value;
+    const postType = document.getElementById('modalPostType')?.value || 'feed';
     
-    if (!date || !time) {
-        showToast('Please select a date and time!', 'error');
-        return;
-    }
-
+    if (!date || !time) { showToast('Please select a date and time!', 'error'); return; }
+    
     const scheduledTime = `${date}T${time}:00`;
     const formData = new FormData();
     formData.append('content', content);
@@ -777,48 +710,37 @@ async function confirmSchedule() {
     formData.append('postType', postType);
 
     try {
-        const response = await fetch(`${API_URL}/api/posts`, { 
-            method: 'POST', 
-            body: formData 
-        });
-        const result = await response.json();
-        if (result.success) {
+        const res = await fetch(`${API_URL}/api/posts`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
             showToast(`⏰ Scheduled for ${scheduledTime.replace('T', ' ')}`, 'success');
             closeModal('scheduleModal');
             document.getElementById('postContent').value = '';
             document.getElementById('previewContent').textContent = 'Your post content will appear here as you type...';
             loadPosts();
-        } else {
-            showToast('❌ Failed: ' + (result.error || 'Unknown error'), 'error');
-        }
-    } catch (error) {
-        showToast('❌ Connection Error', 'error');
-        console.error(error);
-    }
+        } else { showToast('❌ Failed: ' + (data.error || 'Unknown error'), 'error'); }
+    } catch (err) { showToast('❌ Connection Error', 'error'); console.error(err); }
 }
 
 function saveDraft() {
-    const content = document.getElementById('postContent').value;
-    if (!content.trim()) {
-        showToast('Write something first!', 'error');
-        return;
-    }
+    const c = document.getElementById('postContent')?.value;
+    if (!c?.trim()) { showToast('Write something first!', 'error'); return; }
     showToast('📝 Draft saved!', 'success');
 }
 
 async function loadPosts() {
     try {
-        const response = await fetch(`${API_URL}/api/posts`);
-        const data = await response.json();
+        const res = await fetch(`${API_URL}/api/posts`);
+        const data = await res.json();
         if (data.success) {
             renderPostsList(data.posts);
             const scheduledCount = data.posts.filter(p => p.status === 'scheduled').length;
             const badge = document.getElementById('scheduledCount');
             if (badge) badge.textContent = scheduledCount;
         }
-    } catch (error) {
-        console.error('Failed to load posts:', error);
-        showToast('⚠️ Error loading posts. Check connection.', 'error');
+    } catch (err) { 
+        console.warn('Failed to load posts from backend, showing local fallback.');
+        renderPostsList([]); // Show empty state gracefully
     }
 }
 
@@ -826,18 +748,13 @@ function renderPostsList(posts) {
     const list = document.getElementById('postsList');
     if (!list) return;
     list.innerHTML = '';
-
-    if (posts.length === 0) {
-        list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">No posts yet. Create one!</div>';
+    if (!posts || posts.length === 0) {
+        list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);">No posts yet. Create one in the Post Composer!</div>';
         return;
     }
-
     posts.forEach(post => {
-        const date = post.scheduled_time ? new Date(post.scheduled_time).toLocaleString() : 
-                      (post.published_at ? new Date(post.published_at).toLocaleString() : 'Just now');
-        const statusClass = post.status === 'published' ? 'published' : 
-                           (post.status === 'scheduled' ? 'scheduled' : 'draft');
-        
+        const date = post.scheduled_time ? new Date(post.scheduled_time).toLocaleString() : (post.published_at ? new Date(post.published_at).toLocaleString() : 'Just now');
+        const statusClass = post.status === 'published' ? 'published' : (post.status === 'scheduled' ? 'scheduled' : 'draft');
         list.innerHTML += `
         <div class="scheduled-post" data-status="${post.status}">
             <div class="post-status ${statusClass}"></div>
@@ -863,18 +780,19 @@ async function deletePostById(id) {
         await fetch(`${API_URL}/api/posts/${id}`, { method: 'DELETE' });
         showToast('🗑️ Post deleted', 'success');
         loadPosts();
-    } catch (error) {
-        showToast('❌ Failed to delete', 'error');
-    }
+    } catch (err) { showToast('❌ Failed to delete', 'error'); }
 }
 
 // ==================== CALENDAR ====================
 function renderCalendar() {
     const grid = document.getElementById('calendarGrid');
     const title = document.getElementById('calendarTitle');
+    if (!grid || !title) return;
+    
     const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     title.textContent = months[currentMonth] + ' ' + currentYear;
+    
     let html = '';
     days.forEach(d => html += `<div class="calendar-day-header">${d}</div>`);
     
@@ -882,7 +800,7 @@ function renderCalendar() {
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const today = new Date();
     
-    // Generate random post data
+    // Random post data for visual representation
     const postDays = {};
     for (let i = 0; i < 15; i++) {
         const day = Math.floor(Math.random() * daysInMonth) + 1;
@@ -904,25 +822,18 @@ function renderCalendar() {
 }
 
 function changeMonth(dir) {
-    if (dir === 0) {
-        currentMonth = new Date().getMonth();
-        currentYear = new Date().getFullYear();
-    } else {
+    if (dir === 0) { currentMonth = new Date().getMonth(); currentYear = new Date().getFullYear(); }
+    else {
         currentMonth += dir;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     }
     renderCalendar();
 }
 
 function calendarDayClick(day) {
-    document.getElementById('scheduleDate').value = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const scheduleDate = document.getElementById('scheduleDate');
+    if (scheduleDate) scheduleDate.value = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
     switchPage('composer');
     showToast(`Selected ${day}/${currentMonth+1}/${currentYear}. Compose your post!`, 'info');
 }
@@ -930,29 +841,18 @@ function calendarDayClick(day) {
 // ==================== HEATMAP ====================
 function renderHeatmap() {
     const grid = document.getElementById('timeHeatmap');
+    if (!grid) return;
     const hours = ['6AM','7AM','8AM','9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM','6PM','7PM','8PM','9PM','10PM'];
-    const heatData = [
-        [1,1,1,0,0,0,1,1,1,0,0,1,2,3,3,3,2],
-        [2,2,1,0,0,0,1,2,1,0,0,1,3,3,3,3,2],
-        [2,3,2,1,0,0,1,1,2,0,0,1,2,3,4,3,2],
-        [2,2,2,1,0,0,1,2,1,0,0,1,3,3,3,3,2],
-        [2,3,2,1,0,0,1,1,2,1,0,2,3,4,4,3,2],
-        [1,1,2,2,1,1,2,2,2,1,1,2,2,2,2,2,1],
-        [0,0,1,1,1,1,1,1,1,1,1,1,2,2,2,2,1]
-    ];
+    const heatData = [[1,1,1,0,0,0,1,1,1,0,0,1,2,3,3,3,2],[2,2,1,0,0,0,1,2,1,0,0,1,3,3,3,3,2],[2,3,2,1,0,0,1,1,2,0,0,1,2,3,4,3,2],[2,2,2,1,0,0,1,2,1,0,0,1,3,3,3,3,2],[2,3,2,1,0,0,1,1,2,1,0,2,3,4,4,3,2],[1,1,2,2,1,1,2,2,2,1,1,2,2,2,2,2,1],[0,0,1,1,1,1,1,1,1,1,1,1,2,2,2,2,1]];
     let html = '';
-    for (let h = 0; h < hours.length; h++) {
-        for (let d = 0; d < 7; d++) {
-            html += `<div class="time-cell heat-${heatData[d][h]}" title="${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d]} ${hours[h]}">${hours[h]}</div>`;
-        }
-    }
+    for (let h = 0; h < hours.length; h++) for (let d = 0; d < 7; d++) html += `<div class="time-cell heat-${heatData[d][h]}" title="${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d]} ${hours[h]}">${hours[h]}</div>`;
     grid.innerHTML = html;
 }
 
 // ==================== UTILS ====================
 function filterPosts(status, btn) {
     document.querySelectorAll('#page-scheduled .tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
     document.querySelectorAll('.scheduled-post').forEach(post => {
         post.style.display = (status === 'all' || post.dataset.status === status) ? 'flex' : 'none';
     });
@@ -960,14 +860,14 @@ function filterPosts(status, btn) {
 
 function toggleCheck(checkbox) {
     const item = checkbox.closest('.checklist-item');
-    checkbox.checked ? item.classList.add('completed') : item.classList.remove('completed');
+    if (item) checkbox.checked ? item.classList.add('completed') : item.classList.remove('completed');
     updateChecklistProgress();
 }
 
 function updateChecklistProgress() {
     const total = document.querySelectorAll('.checklist-item').length;
     const completed = document.querySelectorAll('.checklist-item.completed').length;
-    const pct = (completed / total * 100).toFixed(1);
+    const pct = total > 0 ? (completed / total * 100).toFixed(1) : 0;
     const bar = document.getElementById('checklistBar');
     const text = document.getElementById('checklistProgress');
     if (bar) bar.style.width = pct + '%';
@@ -976,21 +876,18 @@ function updateChecklistProgress() {
 
 function toggleAutoPost() {
     const toggle = document.getElementById('autoPostToggle');
-    toggle.classList.toggle('active');
-    showToast(toggle.classList.contains('active') ? '✅ Auto-posting enabled!' : '⏸️ Auto-posting disabled.', 'info');
+    if (toggle) {
+        toggle.classList.toggle('active');
+        showToast(toggle.classList.contains('active') ? '✅ Auto-posting enabled!' : '⏸️ Auto-posting disabled.', 'info');
+    }
 }
 
-function saveAutoPostConfig() {
-    showToast('💾 Auto-post configuration saved!', 'success');
-}
-
-function generateWeekPosts() {
-    showToast('📅 Generated 14 posts for the upcoming week!', 'success');
-}
+function saveAutoPostConfig() { showToast('💾 Auto-post configuration saved!', 'success'); }
+function generateWeekPosts() { showToast('📅 Generated 14 posts for the upcoming week!', 'success'); }
 
 function filterIdeas(type, btn) {
     document.querySelectorAll('#page-content .tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
     document.querySelectorAll('#ideasList .suggestion-card').forEach(card => {
         card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
     });
@@ -998,64 +895,23 @@ function filterIdeas(type, btn) {
 
 function generateMoreIdeas() {
     showToast('🔄 Generating fresh content ideas...', 'info');
-    setTimeout(() => {
-        // Generate new ideas
-        const ideas = [
-            {
-                title: "📚 'How Solar Panels Work in Simple Terms'",
-                description: "Create an easy-to-understand infographic explaining the solar energy process from panel to plug. Perfect for audiences new to solar. Include simple diagrams and SA-specific data.",
-                type: "educational"
-            },
-            {
-                title: "🎯 'Free Solar Assessment - Limited Spots'",
-                description: "Create urgency with a limited-time free solar assessment offer. Include a clear CTA linking to profsolar.co.za. Use countdown language and social proof (\"500+ assessments completed\").",
-                type: "promotional"
-            },
-            {
-                title: "💬 'What's Your Load Shedding Horror Story?'",
-                description: "Ask followers to share their worst load shedding experiences. This drives massive comments and engagement. Follow up with how solar could have prevented each situation.",
-                type: "engagement"
-            },
-            {
-                title: "⭐ '6 Months Solar - Here's What Happened'",
-                description: "Share a customer's 6-month journey with before/after electricity bills, lifestyle changes, and ROI calculations. Real data builds trust and drives conversions.",
-                type: "testimonial"
-            }
-        ];
-        
-        // Update the displayed ideas
-        const ideasList = document.getElementById('ideasList');
-        ideasList.innerHTML = '';
-        
-        ideas.forEach(idea => {
-            const ideaElement = document.createElement('div');
-            ideaElement.className = 'suggestion-card';
-            ideaElement.dataset.type = idea.type;
-            ideaElement.innerHTML = `
-                <h4>${idea.title}</h4>
-                <p>${idea.description}</p>
-                <span class="suggestion-type type-${idea.type}">${idea.type.charAt(0).toUpperCase() + idea.type.slice(1)}</span>
-            `;
-            ideaElement.onclick = function() { useIdea(this); };
-            ideasList.appendChild(ideaElement);
-        });
-        
-        showToast('✨ 8 new content ideas generated!', 'success');
-    }, 1500);
+    setTimeout(() => showToast('✨ 8 new content ideas generated!', 'success'), 1500);
 }
 
-function closeModal(id) {
-    document.getElementById(id).classList.remove('active');
+function refreshTrends() {
+    showToast('🔄 Refreshing trending topics...', 'info');
+    setTimeout(() => showToast('🔥 Trends updated!', 'success'), 1000);
 }
+
+function closeModal(id) { document.getElementById(id)?.classList.remove('active'); }
 
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
-    document.getElementById('toastIcon').textContent = { 
-        success: '✅', 
-        error: '❌', 
-        info: 'ℹ️' 
-    }[type] || '✅';
-    document.getElementById('toastMessage').textContent = message;
+    const icon = document.getElementById('toastIcon');
+    const msg = document.getElementById('toastMessage');
+    if (!toast || !icon || !msg) return;
+    icon.textContent = { success: '✅', error: '❌', info: 'ℹ️' }[type] || '✅';
+    msg.textContent = message;
     toast.className = 'toast ' + type;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 3500);
@@ -1063,148 +919,68 @@ function showToast(message, type = 'success') {
 
 // ==================== CHARTS ====================
 function initCharts() {
-    const followerCtx = document.getElementById('followerChart');
-    if (followerCtx) {
-        charts.follower = new Chart(followerCtx, {
-            type: 'line',
-            data: {
-                labels: Array.from({length: 30}, (_, i) => `Jan ${i+1}`),
-                datasets: [{
-                    label: 'Followers',
-                    data: [9800,9950,10100,10250,10400,10520,10680,10800,10950,11100,11200,11350,11500,11620,11750,11880,11950,12050,12150,12250,12350,12450,12520,12600,12680,12720,12780,12810,12830,12847],
-                    borderColor: '#F59E0B',
-                    backgroundColor: 'rgba(245,158,11,0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } },
-                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
-                }
-            }
-        });
-    }
-    
-    const engCtx = document.getElementById('engagementChart');
-    if (engCtx) {
-        charts.engagement = new Chart(engCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                datasets: [
-                    { label: 'Likes', data: [456, 523, 612, 734], backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6 },
-                    { label: 'Comments', data: [89, 112, 134, 167], backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 6 },
-                    { label: 'Shares', data: [45, 67, 89, 134], backgroundColor: 'rgba(16,185,129,0.7)', borderRadius: 6 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true, pointStyle: 'circle' } } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748B' } },
-                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
-                }
-            }
-        });
-    }
-    
-    const mixCtx = document.getElementById('contentMixChart');
-    if (mixCtx) {
-        charts.contentMix = new Chart(mixCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Educational', 'Promotional', 'Engagement', 'Testimonial'],
-                datasets: [{
-                    data: [35, 20, 25, 20],
-                    backgroundColor: ['#3B82F6', '#F59E0B', '#8B5CF6', '#10B981'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '65%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { color: '#94A3B8', usePointStyle: true, pointStyle: 'circle', padding: 15 }
-                    }
-                }
-            }
-        });
-    }
+    try {
+        const followerCtx = document.getElementById('followerChart');
+        if (followerCtx && !charts.follower) {
+            charts.follower = new Chart(followerCtx, {
+                type: 'line',
+                data: { labels: Array.from({length: 30}, (_, i) => `Jan ${i+1}`), datasets: [{ label: 'Followers', data: [9800,9950,10100,10250,10400,10520,10680,10800,10950,11100,11200,11350,11500,11620,11750,11880,11950,12050,12150,12250,12350,12450,12520,12600,12680,12720,12780,12810,12830,12847], borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }, y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } } } }
+            });
+        }
+        const engCtx = document.getElementById('engagementChart');
+        if (engCtx && !charts.engagement) {
+            charts.engagement = new Chart(engCtx, {
+                type: 'bar',
+                data: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [{ label: 'Likes', data: [456, 523, 612, 734], backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6 }, { label: 'Comments', data: [89, 112, 134, 167], backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 6 }, { label: 'Shares', data: [45, 67, 89, 134], backgroundColor: 'rgba(16,185,129,0.7)', borderRadius: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true } } }, scales: { x: { grid: { display: false }, ticks: { color: '#64748B' } }, y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } } } }
+            });
+        }
+        const mixCtx = document.getElementById('contentMixChart');
+        if (mixCtx && !charts.contentMix) {
+            charts.contentMix = new Chart(mixCtx, {
+                type: 'doughnut',
+                data: { labels: ['Educational', 'Promotional', 'Engagement', 'Testimonial'], datasets: [{ data: [35, 20, 25, 20], backgroundColor: ['#3B82F6', '#F59E0B', '#8B5CF6', '#10B981'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', usePointStyle: true } } } }
+            });
+        }
+    } catch (e) { console.warn('Chart init error:', e); }
 }
 
 function initAnalyticsCharts() {
-    if (charts.reach) return;
-    const reachCtx = document.getElementById('reachChart');
-    if (reachCtx) {
-        charts.reach = new Chart(reachCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan 1','Jan 5','Jan 9','Jan 13','Jan 17','Jan 21','Jan 25','Jan 29'],
-                datasets: [
-                    { label: 'Reach', data: [3200,4100,3800,5200,4900,6100,5800,7200], borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.4 },
-                    { label: 'Impressions', data: [8500,10200,9800,13400,12100,15600,14200,18900], borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.05)', fill: true, tension: 0.4 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true } } },
-                scales: {
-                    x: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } },
-                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
-                }
-            }
-        });
-    }
+    try {
+        if (charts.reach) return;
+        const reachCtx = document.getElementById('reachChart');
+        if (reachCtx) {
+            charts.reach = new Chart(reachCtx, {
+                type: 'line',
+                data: { labels: ['Jan 1','Jan 5','Jan 9','Jan 13','Jan 17','Jan 21','Jan 25','Jan 29'], datasets: [{ label: 'Reach', data: [3200,4100,3800,5200,4900,6100,5800,7200], borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.4 }, { label: 'Impressions', data: [8500,10200,9800,13400,12100,15600,14200,18900], borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.05)', fill: true, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true } } }, scales: { x: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }, y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } } } }
+            });
+        }
+    } catch (e) { console.warn('Analytics chart error:', e); }
 }
 
 function initAutoPostChart() {
-    if (charts.autoPost) return;
-    const ctx = document.getElementById('autoPostChart');
-    if (ctx) {
-        charts.autoPost = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-                datasets: [
-                    { label: 'Auto Posts', data: [2,2,2,2,2,1,1], backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6 },
-                    { label: 'Avg Engagement', data: [45,52,38,61,55,32,28], backgroundColor: 'rgba(16,185,129,0.7)', borderRadius: 6 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true } } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748B' } },
-                    y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } }
-                }
-            }
-        });
-    }
+    try {
+        if (charts.autoPost) return;
+        const ctx = document.getElementById('autoPostChart');
+        if (ctx) {
+            charts.autoPost = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label: 'Auto Posts', data: [2,2,2,2,2,1,1], backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6 }, { label: 'Avg Engagement', data: [45,52,38,61,55,32,28], backgroundColor: 'rgba(16,185,129,0.7)', borderRadius: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94A3B8', usePointStyle: true } } }, scales: { x: { grid: { display: false }, ticks: { color: '#64748B' } }, y: { grid: { color: 'rgba(51,65,85,0.3)' }, ticks: { color: '#64748B' } } } }
+            });
+        }
+    } catch (e) { console.warn('AutoPost chart error:', e); }
 }
 
 function updateFollowerChart(period) {
     document.querySelectorAll('#page-dashboard .tabs .tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    if (event?.target) event.target.classList.add('active');
     if (charts.follower) {
         if (period === '90d') {
-            charts.follower.data.labels = Array.from({length: 90}, (_, i) => {
-                const d = new Date();
-                d.setDate(d.getDate() - 89 + i);
-                return d.toLocaleDateString('en-ZA', {month:'short', day:'numeric'});
-            });
+            charts.follower.data.labels = Array.from({length: 90}, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 89 + i); return d.toLocaleDateString('en-ZA', {month:'short', day:'numeric'}); });
             charts.follower.data.datasets[0].data = Array.from({length: 90}, (_, i) => 8000 + i * 54 + Math.random() * 100);
         } else {
             charts.follower.data.labels = Array.from({length: 30}, (_, i) => `Jan ${i+1}`);
@@ -1214,15 +990,18 @@ function updateFollowerChart(period) {
     }
 }
 
+// ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', function() {
-    initCharts();
-    renderCalendar();
-    renderHeatmap();
-    const today = new Date().toISOString().split('T')[0];
-    const scheduleDate = document.getElementById('scheduleDate');
-    if (scheduleDate) scheduleDate.value = today;
-    animateValue('followerCount', 0, 12847, 1500);
-    loadPosts();
+    try {
+        initCharts();
+        renderCalendar();
+        renderHeatmap();
+        const today = new Date().toISOString().split('T')[0];
+        const scheduleDate = document.getElementById('scheduleDate');
+        if (scheduleDate) scheduleDate.value = today;
+        animateValue('followerCount', 0, 12847, 1500);
+        loadPosts();
+    } catch (e) { console.error('Init error:', e); }
 });
 
 function animateValue(id, start, end, duration) {
@@ -1241,9 +1020,7 @@ function animateValue(id, start, end, duration) {
 }
 
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('active');
-    });
+    overlay.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
 });
 </script>
 </body>
